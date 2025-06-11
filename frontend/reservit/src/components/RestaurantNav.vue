@@ -1,10 +1,10 @@
 <template>
     <nav class="fixed bottom-0 w-full bg-zinc-900 text-white flex justify-around items-center px-4 py-3 z-50">
-      <button @click="goTo('/restaurant')" class="flex-1 flex p-1 justify-center">
+      <button @click="goTo('/dashboard')" class="flex-1 flex p-1 justify-center">
         <HomeIcon class="w-6 h-6 text-white" />
       </button>
       <div class="relative flex-1 flex justify-center">
-        <button @click="goTo('/list')"
+        <button @click="goTo('/reservations')"
           class="bg-orange-400 p-4 rounded-xl rotate-45 z-10"
           style="margin-top: -50px;"
         >
@@ -13,7 +13,7 @@
           </div>
         </button>
       </div>
-      <button @click="goTo('/restaurant/settings')" class="flex-1 flex justify-center">
+      <button @click="goTo('/settings')" class="flex-1 flex justify-center">
         <Cog6ToothIcon class="w-6 h-6 text-white" />
       </button>
     </nav>
