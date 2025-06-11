@@ -122,7 +122,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import BackButton from '@/components/BackButton.vue'
 
-const API_URL = import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VUE_APP_API_URL
 
 const name = ref('')
 const familyName = ref('')
