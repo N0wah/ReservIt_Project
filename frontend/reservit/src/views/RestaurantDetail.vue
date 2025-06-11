@@ -70,7 +70,7 @@
     </div>
   </div>
 
-  <!-- Fallback loading -->
+  <!-- Fallback loadingaa -->
   <div v-else class="text-center text-white py-20">Chargement...</div>
 </template>
 
