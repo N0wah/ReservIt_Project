@@ -19,20 +19,8 @@
       </div>
 
       <ul v-else class="list-none flex flex-col gap-2 z-0">
-        <li>
-            <Bookitems :lat="48.8584" :lng="2.2945"  />
-        </li>
-        <li>
-            <Bookitems :lat="48.8584" :lng="2.2945"  />
-        </li>
-        <li>
-            <Bookitems :lat="48.8584" :lng="2.2945"  />
-        </li>
-        <li>
-            <Bookitems :lat="48.8584" :lng="2.2945"  />
-        </li>
-        <li>
-            <Bookitems :lat="48.8584" :lng="2.2945"  />
+        <li v-for="reservation in reservations" :key="reservation.id">
+          <Bookitems :reservation="reservation" />
         </li>
       </ul>
     </div>
@@ -41,11 +29,26 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Bookitems from '../components/Bookitems.vue'
+import axios from 'axios'
 
 const isAuthenticated = ref(false)
+const reservations = ref([])
+const apiUrl = import.meta.env.VITE_API_URL;
 
-onMounted(() => {
+onMounted(async () => {
   const userData = localStorage.getItem('user')
-  isAuthenticated.value = !!userData
+  if (!userData) {
+    isAuthenticated.value = false
+    return
+  }
+  isAuthenticated.value = true
+  const user = JSON.parse(userData)
+  try {
+    const res = await axios.get(`${apiUrl}/reservations/?user_id=${user.id}`)
+    // Filtrer les réservations qui ne sont pas "Finished"
+    reservations.value = res.data.filter(r => r.status && r.status.toLowerCase() !== 'fini' && r.status.toLowerCase() !== 'finished')
+  } catch (error) {
+    reservations.value = []
+  }
 })
 </script>

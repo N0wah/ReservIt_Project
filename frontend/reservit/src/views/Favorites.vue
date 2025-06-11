@@ -46,6 +46,7 @@ import axios from 'axios'
 import RestaurantCard from '../components/RestaurantsCard.vue'
 
 const favoriteRestaurants = ref([])
+const isAuthenticated = ref(false)
 const apiUrl = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
