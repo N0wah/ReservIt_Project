@@ -141,7 +141,7 @@ const handleRegister = async () => {
   }
 
   try {
-    const response = await axios.post(`${apiUrl}/users`, {
+    const response = await axios.post(`${apiUrl}/users/`, {
       name: name.value,
       
       family_name: familyName.value,
