@@ -122,8 +122,6 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import BackButton from '@/components/BackButton.vue'
 
-const API_URL = import.meta.env.VUE_APP_API_URL
-console.log('API URL:', API_URL);
 
 const name = ref('')
 const familyName = ref('')
@@ -132,6 +130,9 @@ const password = ref('')
 const confirmPassword = ref('')
 const errorMessage = ref('')
 const router = useRouter()
+
+const apiUrl = import.meta.env.VITE_API_URL;
+console.log('API URL:', apiUrl);
 
 const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
