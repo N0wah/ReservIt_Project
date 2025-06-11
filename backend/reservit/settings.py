@@ -61,7 +61,8 @@ MIDDLEWARE = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_ALLOWED_ORIGINS = [
-    "https://reservit-project.vercel.app",  # Frontend Vercel
+    "https://reservit-project.vercel.app", # Frontend Vercel
+    "http://localhost:5173",  # Frontend Localhost
 ]
 
 
