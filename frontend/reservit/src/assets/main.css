@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Carattere&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --font-carattere: 'Carattere', sans-serif;
+    --font-Poppins: 'Poppins', sans-serif;
+}
+
+.vc-container {
+    background: #444444 !important;
+  }
+  .vc-title {
+    color: #EBEBEB !important;
+  }
+  .vc-day-content {
+    color: #EBEBEB !important;
+  }
+  .vc-highlight {
+    background: orange !important;
+  }
+
+  .vc-container,
+.vc-container * {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.vc-header {
+    border-bottom: none !important;
+  }
+
+  /* (optionnel) Scroll fluide */
+::-webkit-scrollbar {
+    display: none;
+  }
+  
