@@ -122,7 +122,6 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import BackButton from '@/components/BackButton.vue'
 
-const API_URL = import.meta.env.VUE_APP_API_URL
 
 const name = ref('')
 const familyName = ref('')
@@ -132,6 +131,8 @@ const confirmPassword = ref('')
 const errorMessage = ref('')
 const router = useRouter()
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
     errorMessage.value = 'Passwords do not match'
@@ -139,19 +140,18 @@ const handleRegister = async () => {
   }
 
   try {
-    const response = await axios.post(API_URL+'/users', {
+    const response = await axios.post(`${apiUrl}/users/`, {
       name: name.value,
       family_name: familyName.value,
       email: email.value,
-      password_hash: password.value, // Backend will hash this
-      is_admin: false // always set to false by default
+      password: password.value,
+      is_admin: false
     })
     localStorage.setItem('user', JSON.stringify(response.data))
     errorMessage.value = ''
     router.push('/login')
   } catch (error) {
     if (error.response && error.response.data) {
-      console.log(error.response.data)
       errorMessage.value = Object.values(error.response.data).flat().join(' ')
     } else {
       errorMessage.value = 'Registration failed'

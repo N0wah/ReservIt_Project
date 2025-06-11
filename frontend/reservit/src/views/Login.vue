@@ -74,18 +74,18 @@
   const password = ref('')
   const errorMessage = ref('')
   const router = useRouter()
-  
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', {
+      const response = await axios.post(`${apiUrl}/login/`, {
         email: email.value,
         password: password.value,
       })
-      // Supposons que l'API renvoie { token: "...", user: {...} }
       if (response.data.token) {
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('user', JSON.stringify(response.data.user))
-        router.push('/profile') // <-- redirige vers le profil
+        router.push('/profile')
       } else {
         errorMessage.value = 'Identifiants invalides'
       }
