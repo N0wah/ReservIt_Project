@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-q)8boy@06p(h6hv%=#eqhb%wma!*et&ajd%pvohuuj_4f68cpj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'reservit-api.up.railway.app']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
