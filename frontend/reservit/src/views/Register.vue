@@ -123,6 +123,7 @@ import { useRouter } from 'vue-router'
 import BackButton from '@/components/BackButton.vue'
 
 const API_URL = import.meta.env.VUE_APP_API_URL
+console.log('API URL:', API_URL);
 
 const name = ref('')
 const familyName = ref('')
@@ -139,8 +140,9 @@ const handleRegister = async () => {
   }
 
   try {
-    const response = await axios.post(API_URL+'/users', {
+    const response = await axios.post(`${apiUrl}/users`, {
       name: name.value,
+      
       family_name: familyName.value,
       email: email.value,
       password_hash: password.value, // Backend will hash this
