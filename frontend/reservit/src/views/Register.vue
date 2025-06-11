@@ -139,7 +139,7 @@ const handleRegister = async () => {
   }
 
   try {
-    const response = await axios.post(API_URL+'', {
+    const response = await axios.post(API_URL+'/users', {
       name: name.value,
       family_name: familyName.value,
       email: email.value,
