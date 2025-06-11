@@ -15,18 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from api import views
+from django.urls import path, include
 
 urlpatterns = [
+    path('', include('api.urls')),  # Redirect root URL to API
     path('admin/', admin.site.urls),
-    path('users/', views.UsersListView.as_view(), name='user-list'),
-    path('users/<int:id>/', views.UserRetrieveUpdateDestroy.as_view(), name='user-detail'),
-    path('restaurants/', views.RestaurantListCreate.as_view(), name='restaurant-list'),
-    path('restaurants/<int:id>/', views.RestaurantRetrieveUpdateDestroy.as_view(), name='restaurant-detail'),
-    path('tables/', views.TableListCreate.as_view(), name='table-list'),
-    path('reservations/', views.ReservationListCreate.as_view(), name='reservation-list'),
-    path('favorites/', views.FavoriteListCreate.as_view(), name='favorite-list'),
-    path('favorites/<int:id>/', views.FavoriteRetrieveUpdateDestroy.as_view(), name='favorite-detail'),
-    path('login/', views.LoginView.as_view(), name='login'),
+    path('api/', include('api.urls')),
 ]
