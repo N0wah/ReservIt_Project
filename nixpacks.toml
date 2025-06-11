@@ -1,0 +1,11 @@
+[phases.setup]
+commands = []
+
+[phases.install]
+commands = ["pip install -r backend/requirements.txt"]
+
+[phases.build]
+commands = []
+
+[phases.start]
+commands = ["cd backend && gunicorn myproject.wsgi"]
