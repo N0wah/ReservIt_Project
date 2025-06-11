@@ -8,4 +8,4 @@ commands = ["pip install -r backend/requirements.txt"]
 commands = []
 
 [phases.start]
-commands = ["cd backend && gunicorn myproject.wsgi"]
+commands = ["gunicorn reservit.wsgi"]
