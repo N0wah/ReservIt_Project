@@ -1,7 +1,7 @@
 <template>
   <BackButton />
 
-  <div class="relative min-h-screen bg-[#2E2E2E] px-10 pt-16 text-white flex flex-col gap-4 overflow-x-hidden">
+  <div class="relative min-h-screen bg-[#2E2E2E] px-10 pt-16 text-white flex flex-col gap-4 overflow-x-hidden pb-10">
 
     <!-- Profil Header -->
     <section class="w-full bg-[#444444] rounded-2xl p-3 shadow-[0_2px_10.2px_rgba(0,0,0,0.25)]">
@@ -61,7 +61,7 @@
     </section>
 
     <!-- Reserve Button -->
-    <div class="w-full flex justify-center pb-10">
+    <div class="w-full flex justify-center">
       <button
         @click="showSuccess = true"
         class="bg-orange-500 w-full hover:bg-orange-600 text-white font-light text-2xl py-3 px-10 rounded-full transition duration-200 shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]"
