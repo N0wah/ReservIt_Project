@@ -1,6 +1,6 @@
 <template>
   
-  <div v-if="restaurant" class="bg-[#242424] text-white w-screen max-w-none relative h-screen">
+  <div v-if="restaurant" class="bg-[#242424] text-white w-screen max-w-none relative h-screen ">
     <BackButton/>
 
     <!-- Image principale -->
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Infos -->
-    <div class=" space-y-3 sm:space-y-4 text-xs sm:text-sm bg-[#242424] p-4 rounded-3xl mt-[-4vh] z-50 relative ">
+    <div class=" space-y-3 sm:space-y-4 text-xs sm:text-sm bg-[#242424] p-4 rounded-3xl mt-[-4vh] z-50 relative  ">
       <div class="flex  sm:flex-row justify-between items-center gap-2">
         <div class="space-y-1">
           <h2 class="text-lg sm:text-xl font-bold leading-tight">
@@ -44,7 +44,7 @@
       </div>
 
       <!-- Galerie -->
-      <div>
+      <div v-if="photos.length > 0">
         <p class="text-gray-300 mb-2 underline"><strong>Photos</strong></p>
         <div class="flex space-x-2 overflow-x-auto pb-2">
           <img
