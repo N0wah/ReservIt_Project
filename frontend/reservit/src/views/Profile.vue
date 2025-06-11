@@ -68,6 +68,7 @@ import axios from 'axios'
 const router = useRouter()
 const user = ref(null)
 const reservations = ref([])
+const apiUrl = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   const token = localStorage.getItem('token')
@@ -76,13 +77,11 @@ onMounted(async () => {
     router.push('/login')
   } else {
     user.value = JSON.parse(userData)
-    // Fetch reservation history for this user
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/reservations/?user_id=${user.value.id}`)
-      // Pour chaque réservation, récupère les infos du restaurant
+      const res = await axios.get(`${apiUrl}/reservations/?user_id=${user.value.id}`)
       const reservationsWithRestaurant = await Promise.all(res.data.map(async reservation => {
         try {
-          const restRes = await axios.get(`http://127.0.0.1:8000/api/restaurants/${reservation.restaurant}/`)
+          const restRes = await axios.get(`${apiUrl}/restaurants/${reservation.restaurant}/`)
           return { ...reservation, restaurant: restRes.data }
         } catch {
           return { ...reservation, restaurant: {} }
@@ -91,7 +90,6 @@ onMounted(async () => {
       reservations.value = reservationsWithRestaurant
     } catch (error) {
       reservations.value = []
-      console.error('Erreur lors du chargement des réservations :', error)
     }
   }
 })

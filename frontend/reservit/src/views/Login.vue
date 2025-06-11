@@ -82,11 +82,10 @@
         email: email.value,
         password: password.value,
       })
-      // Supposons que l'API renvoie { token: "...", user: {...} }
       if (response.data.token) {
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('user', JSON.stringify(response.data.user))
-        router.push('/profile') // <-- redirige vers le profil
+        router.push('/profile')
       } else {
         errorMessage.value = 'Identifiants invalides'
       }

@@ -87,10 +87,11 @@ const restaurant = ref(null)
 const mainImage = ref('')
 const photos = ref([])
 const isFavorite = ref(false)
+const apiUrl = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/api/restaurants/${route.params.id}/`)
+    const response = await axios.get(`${apiUrl}/restaurants/${route.params.id}/`)
     restaurant.value = response.data
 
     if (restaurant.value.images) {
@@ -110,7 +111,7 @@ onMounted(async () => {
     const userData = localStorage.getItem('user')
     if (userData) {
       const user = JSON.parse(userData)
-      const favRes = await axios.get(`http://127.0.0.1:8000/api/favorites/?user_id=${user.id}&restaurant_id=${route.params.id}`)
+      const favRes = await axios.get(`${apiUrl}/favorites/?user_id=${user.id}&restaurant_id=${route.params.id}`)
       isFavorite.value = Array.isArray(favRes.data) && favRes.data.some(fav => fav.user_id === user.id && fav.restaurant_id === Number(route.params.id))
     } else {
       isFavorite.value = false
@@ -128,7 +129,7 @@ function toggleFavorite() {
   const user = JSON.parse(userData)
   if (isFavorite.value) {
     // Ajoute en favori
-    axios.post('http://127.0.0.1:8000/api/favorites/', {
+    axios.post(`${apiUrl}/favorites/`, {
       user_id: user.id,
       restaurant_id: restaurant.value.id
     }).catch(err => {
@@ -139,11 +140,11 @@ function toggleFavorite() {
     })
   } else {
     // Supprime le favori (il faut l'id du favori)
-    axios.get('http://127.0.0.1:8000/api/favorites/?user_id=' + user.id + '&restaurant_id=' + restaurant.value.id)
+    axios.get(`${apiUrl}/favorites/?user_id=` + user.id + '&restaurant_id=' + restaurant.value.id)
       .then(res => {
         if (res.data.length > 0) {
           const favId = res.data[0].id
-          axios.delete('http://127.0.0.1:8000/api/favorites/' + favId + '/')
+          axios.delete(`${apiUrl}/favorites/` + favId + '/')
         }
       })
   }

@@ -112,6 +112,7 @@ const contactMethod = ref('phone') // 'phone' ou 'email'
 
 const route = useRoute()
 const restaurantInfo = ref({ name: '', address: '', cities: '' })
+const apiUrl = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   const userData = localStorage.getItem('user')
@@ -138,7 +139,7 @@ onMounted(async () => {
   } else if (route.params.id) {
     // fallback API si pas dans le localStorage
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/restaurants/${route.params.id}/`)
+      const res = await fetch(`${apiUrl}/restaurants/${route.params.id}/`)
       if (res.ok) {
         const data = await res.json()
         restaurantInfo.value = {
