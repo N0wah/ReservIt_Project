@@ -20,5 +20,4 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('api.urls')),  # Redirect root URL to API
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
 ]
