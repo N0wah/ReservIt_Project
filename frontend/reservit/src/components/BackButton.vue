@@ -14,10 +14,6 @@ import { ChevronLeftIcon } from '@heroicons/vue/24/outline'
 const router = useRouter()
 
 const goBack = () => {
-  if (window.history.length > 1) {
-    router.back()
-  } else {
-    router.push('/')
-  }
+  router.push('/home')
 }
 </script>
