@@ -20,7 +20,7 @@
             <CalendarIcon class="w-12 h-12 text-white"/>
             <div class="w-[1px] h-14 bg-[#242424] shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]"></div>
             <div class="w-12 h-12 flex items-center justify-center">
-      <p class="text-[#B7B7B7] text-3xl font-bold">6</p>
+      <p class="text-[#B7B7B7] text-3xl font-bold">{{ reservations.length }}</p>
     </div>
         </div>
       </div>

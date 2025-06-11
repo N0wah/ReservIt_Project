@@ -1,7 +1,7 @@
 <template>
     <button
       @click="toggleFavorite"
-      class="absolute top-2 right-2 p-1 rounded-full bg-white/80 hover:bg-white shadow-md z-20"
+      class="absolute top-4 right-2 p-1 rounded-full bg-white/80 hover:bg-white shadow-md z-20"
     >
       <component
         :is="isFavorite ? HeartSolidIcon : HeartIcon"

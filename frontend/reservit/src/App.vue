@@ -3,8 +3,15 @@
     <router-view />
   </div>
 
-  <!-- Affiche la Navbar pour toutes les routes sauf celles exclues, si l'user n'est pas restaurant et si on n'est pas sur BookingPage -->
-  <Navbar v-if="!excludePaths.includes(route.path) && user?.role !== 'restaurant' && route.name !== 'BookingPage'" />
+  <!-- Affiche la Navbar pour toutes les routes sauf celles exclues, si l'user n'est pas restaurant, si on n'est pas sur BookingPage et pas sur une page de détail restaurant -->
+  <Navbar
+    v-if="
+      !excludePaths.includes(route.path) &&
+      user?.role !== 'restaurant' &&
+      route.name !== 'BookingPage' &&
+      !/^\/restaurant\/[0-9]+$/.test(route.path)
+    "
+  />
 
   <!-- Footer restaurateur -->
   <RestaurantFooter v-if="showFooter && user?.role === 'restaurant'" />
