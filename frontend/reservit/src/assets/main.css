@@ -34,4 +34,24 @@
 ::-webkit-scrollbar {
     display: none;
   }
-  
+
+  @media screen and (orientation: landscape) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+    color: white;
+    font-size: 1.5rem;
+    height: 100vh;
+    margin: 0;
+  }
+  #app {
+    display: none;
+  }
+  body::before {
+    content: "Merci de tourner votre appareil en mode portrait.";
+    text-align: center;
+    padding: 1rem;
+  }
+}
