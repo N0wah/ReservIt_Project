@@ -1,5 +1,5 @@
 <template>
-    <nav class="fixed bottom-0 w-full bg-zinc-900 text-white flex justify-between items-center px-4 py-3 z-50">
+    <nav class="fixed bottom-0 w-full bg-zinc-900 text-white flex justify-between items-center px-4 py-3 z-50 max-w-[512px]">
       <button @click="goTo('/home')" class="flex-1 flex justify-center">
       <div :class="isActive('/home') ? activeClass : ''" class="p-2 rounded-full">
         <HomeIcon class="w-6 h-6 text-white" />
