@@ -83,8 +83,10 @@ const handleLogin = async () => {
       if (response.data.user.is_admin === true) {
         showRestaurantNav.value = true
         router.push('/dashboard') // Redirige vers dashboard admin
+        window.location.reload()
       } else {
         router.push('/profile')
+        window.location.reload()
       }
     } else {
       errorMessage.value = 'Invalid credentials'
