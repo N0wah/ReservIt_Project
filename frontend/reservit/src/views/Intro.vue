@@ -24,7 +24,7 @@
 
     <!-- Bouton en dehors de l'image -->
     <button
-      class="mt-6 bg-orange-500 text-white text-lg  py-3 w-full rounded-full font-Poppins font-light"
+      class="mt-2 bg-orange-500 text-white text-lg  py-3 w-full rounded-full font-Poppins font-light"
       @click="$router.push('/home')"
     >
       Let’s Reserve It

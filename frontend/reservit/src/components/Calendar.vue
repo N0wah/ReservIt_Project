@@ -10,10 +10,11 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, defineEmits } from 'vue';
 
 export default {
-  setup() {
+  emits: ['dayclick'],
+  setup(props, { emit }) {
     const selectedDate = ref(null);
     const attributes = ref([
       {
@@ -32,6 +33,7 @@ export default {
 
     const onDayClick = (day) => {
       selectedDate.value = day.date;
+      emit('dayclick', day.date);
     };
 
     return { selectedDate, attributes, onDayClick };

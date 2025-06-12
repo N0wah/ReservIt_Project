@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-[#242424] flex flex-col justify-start px-6 py-8  font-poppins">
+    <div class="h-screen bg-[#242424] flex flex-col justify-start px-6 py-8  font-poppins">
       
       <!-- Logo / titre -->
       <div class="flex justify-center">
@@ -7,7 +7,18 @@
           <span class="text-orange-400">F</span>avorite
         </h2>
       </div>
-      <div class="grid grid-cols-2 gap-4 text-white">
+
+      <div v-if="!isAuthenticated" class="text-white text-center w-full h-screen mt-[-15vh] flex flex-col items-center justify-center gap-4">
+        Please log in to view your favorites.
+        <router-link
+          to="/login"
+          class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-full transition duration-200"
+        >
+          Log in
+        </router-link>
+      </div>
+
+      <div v-else class="grid grid-cols-2 gap-4 text-white">
         <router-link
           v-for="restaurant in favoriteRestaurants"
           :key="restaurant.id"
@@ -23,7 +34,7 @@
           />
         </router-link>
         <div v-if="favoriteRestaurants.length === 0" class="text-white text-center w-full mt-8">
-          Aucun restaurant favori pour le moment.
+          No favorite restaurants at the moment.
         </div>
       </div>
     </div>
@@ -35,15 +46,21 @@ import axios from 'axios'
 import RestaurantCard from '../components/RestaurantsCard.vue'
 
 const favoriteRestaurants = ref([])
+const isAuthenticated = ref(false)
+const apiUrl = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   const userData = localStorage.getItem('user')
-  if (!userData) return
+  if (!userData) {
+    isAuthenticated.value = false
+    return
+  }
+  isAuthenticated.value = true
 
   const user = JSON.parse(userData)
   try {
     // Récupère tous les favoris de cet utilisateur
-    const favRes = await axios.get(`http://127.0.0.1:8000/api/favorites/?user_id=${user.id}`)
+    const favRes = await axios.get(`${apiUrl}/favorites/?user_id=${user.id}`)
     const favoriteList = favRes.data
     if (!Array.isArray(favoriteList) || favoriteList.length === 0) {
       favoriteRestaurants.value = []
@@ -51,7 +68,7 @@ onMounted(async () => {
     }
     // Pour chaque favori, récupère le restaurant associé
     const requests = favoriteList.map(fav =>
-      axios.get(`http://127.0.0.1:8000/api/restaurants/${fav.restaurant_id}/`).then(res => res.data)
+      axios.get(`${apiUrl}/restaurants/${fav.restaurant_id}/`).then(res => res.data)
     )
     favoriteRestaurants.value = await Promise.all(requests)
   } catch (error) {

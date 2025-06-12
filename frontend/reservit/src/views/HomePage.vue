@@ -47,10 +47,11 @@ import RestaurantCard from '../components/RestaurantsCard.vue'
 
 const restaurants = ref([])
 const userName = ref('')
+const apiUrl = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://127.0.0.1:8000/api/restaurants/')
+    const response = await axios.get(`${apiUrl}/restaurants/`)
     restaurants.value = response.data
   } catch (error) {
     console.error('Failed to fetch restaurants:', error)

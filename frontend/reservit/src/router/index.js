@@ -12,6 +12,7 @@ import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 import RegisterDetails from '@/views/Registermore.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import RestaurantReservationList from '@/views/RestaurantReservationList.vue'
 import RestaurantSetting from '@/views/RestaurantSetting.vue'
 import BookingPage from '@/views/BookingPage.vue'
 
@@ -77,13 +78,22 @@ const routes = [
     component: BookingPage,
   },
   {
-    path: '/test2',
+    path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
+    meta: { requiresRestaurant: true }
   },
-  {path: '/test3',
-    name: 'Setting',
+  {
+    path: '/reservations',
+    name: 'RestaurantReservationList',
+    component: RestaurantReservationList,
+    meta: { requiresRestaurant: true }
+  },
+  {
+    path: '/settings',
+    name: 'RestaurantSetting',
     component: RestaurantSetting,
+    meta: { requiresRestaurant: true }
   }
 ]
 

@@ -1,5 +1,5 @@
 <template>
-  <BackButton />
+  <BackToHome />
     <div class="min-h-screen bg-[#242424] flex flex-col justify-start relative px-6 py-4">
       
       <div class="mb-10 flex justify-center itemstar">
@@ -67,7 +67,7 @@
   import { ref } from 'vue'
   import axios from 'axios'
   import { useRouter } from 'vue-router'
-  import BackButton from '@/components/BackButton.vue'
+  import BackToHome from '@/components/BackToHome.vue'
 
   
   const email = ref('')
@@ -82,11 +82,10 @@
         email: email.value,
         password: password.value,
       })
-      // Supposons que l'API renvoie { token: "...", user: {...} }
       if (response.data.token) {
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('user', JSON.stringify(response.data.user))
-        router.push('/profile') // <-- redirige vers le profil
+        router.push('/profile')
       } else {
         errorMessage.value = 'Identifiants invalides'
       }

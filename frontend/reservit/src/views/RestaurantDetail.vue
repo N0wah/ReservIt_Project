@@ -1,6 +1,6 @@
 <template>
   
-  <div v-if="restaurant" class="bg-[#242424] text-white w-screen max-w-none relative h-screen">
+  <div v-if="restaurant" class="bg-[#242424] text-white w-screen max-w-none relative h-screen ">
     <BackButton/>
 
     <!-- Image principale -->
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Infos -->
-    <div class=" space-y-3 sm:space-y-4 text-xs sm:text-sm bg-[#242424] p-4 rounded-3xl mt-[-4vh] z-50 relative ">
+    <div class=" space-y-3 sm:space-y-4 text-xs sm:text-sm bg-[#242424] p-4 rounded-3xl mt-[-4vh] z-50 relative  ">
       <div class="flex  sm:flex-row justify-between items-center gap-2">
         <div class="space-y-1">
           <h2 class="text-lg sm:text-xl font-bold leading-tight">
@@ -44,7 +44,7 @@
       </div>
 
       <!-- Galerie -->
-      <div>
+      <div v-if="photos.length > 0">
         <p class="text-gray-300 mb-2 underline"><strong>Photos</strong></p>
         <div class="flex space-x-2 overflow-x-auto pb-2">
           <img
@@ -70,7 +70,7 @@
     </div>
   </div>
 
-  <!-- Fallback loading -->
+  <!-- Fallback loadingaa -->
   <div v-else class="text-center text-white py-20">Chargement...</div>
 </template>
 
@@ -87,10 +87,11 @@ const restaurant = ref(null)
 const mainImage = ref('')
 const photos = ref([])
 const isFavorite = ref(false)
+const apiUrl = import.meta.env.VITE_API_URL;
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/api/restaurants/${route.params.id}/`)
+    const response = await axios.get(`${apiUrl}/restaurants/${route.params.id}/`)
     restaurant.value = response.data
 
     if (restaurant.value.images) {
@@ -110,7 +111,7 @@ onMounted(async () => {
     const userData = localStorage.getItem('user')
     if (userData) {
       const user = JSON.parse(userData)
-      const favRes = await axios.get(`http://127.0.0.1:8000/api/favorites/?user_id=${user.id}&restaurant_id=${route.params.id}`)
+      const favRes = await axios.get(`${apiUrl}/favorites/?user_id=${user.id}&restaurant_id=${route.params.id}`)
       isFavorite.value = Array.isArray(favRes.data) && favRes.data.some(fav => fav.user_id === user.id && fav.restaurant_id === Number(route.params.id))
     } else {
       isFavorite.value = false
@@ -128,7 +129,7 @@ function toggleFavorite() {
   const user = JSON.parse(userData)
   if (isFavorite.value) {
     // Ajoute en favori
-    axios.post('http://127.0.0.1:8000/api/favorites/', {
+    axios.post(`${apiUrl}/favorites/`, {
       user_id: user.id,
       restaurant_id: restaurant.value.id
     }).catch(err => {
@@ -139,11 +140,11 @@ function toggleFavorite() {
     })
   } else {
     // Supprime le favori (il faut l'id du favori)
-    axios.get('http://127.0.0.1:8000/api/favorites/?user_id=' + user.id + '&restaurant_id=' + restaurant.value.id)
+    axios.get(`${apiUrl}/favorites/?user_id=` + user.id + '&restaurant_id=' + restaurant.value.id)
       .then(res => {
         if (res.data.length > 0) {
           const favId = res.data[0].id
-          axios.delete('http://127.0.0.1:8000/api/favorites/' + favId + '/')
+          axios.delete(`${apiUrl}/favorites/` + favId + '/')
         }
       })
   }
