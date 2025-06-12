@@ -17,19 +17,52 @@
         <section>
     <h1 class="font-Poppins text-lg">Lastest Customers Reservation</h1>
     <ul>
-        <li class=" list-none flex flex-col gap-2 z-0">
-            <RestaurantBookitems />
-            <RestaurantBookitems />
-            <RestaurantBookitems />
-            <RestaurantBookitems />
+        <!-- Affichage conditionnel pour éviter les erreurs de rendu -->
+        <li v-if="Array.isArray(reservations) && reservations.length" class="list-none flex flex-col gap-2 z-0">
+            <RestaurantBookitems v-for="reservation in reservations" :key="reservation.id" :reservation="reservation" />
         </li>
+        <li v-else class="text-gray-400">Aucune réservation récente.</li>
     </ul>
     </section>
     </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import RestaurantNav from '@/components/RestaurantNav.vue';
 import RestaurantGraphic from '@/components/RestaurantGraphic.vue';
 import RestaurantBookitems from '@/components/RestaurantBookitems.vue';
+import axios from 'axios'
+
+const reservations = ref([])
+const apiUrl = import.meta.env.VITE_API_URL;
+
+onMounted(async () => {
+  try {
+    const res = await axios.get(`${apiUrl}/reservations/`)
+    let reservationsRaw = res.data.slice(-4).reverse() // Les 4 dernières
+
+    // Récupère les restaurants nécessaires en une seule fois
+    const restaurantIds = [...new Set(reservationsRaw.map(r => r.restaurant || r.restaurant_id))]
+    const restaurantMap = {}
+    for (const id of restaurantIds) {
+      try {
+        const restRes = await axios.get(`${apiUrl}/restaurants/${id}/`)
+        restaurantMap[id] = restRes.data
+      } catch { restaurantMap[id] = { name: 'Restaurant inconnu' } }
+    }
+
+    // Enrichit chaque réservation avec le restaurant et l'utilisateur
+    for (const reservation of reservationsRaw) {
+      reservation.restaurant = restaurantMap[reservation.restaurant] || restaurantMap[reservation.restaurant_id] || null
+      try {
+        const userRes = await axios.get(`${apiUrl}/users/${reservation.user_id}/`)
+        reservation.user = userRes.data
+      } catch { reservation.user = {} }
+    }
+    reservations.value = reservationsRaw
+  } catch (e) {
+    reservations.value = []
+  }
+})
 </script>

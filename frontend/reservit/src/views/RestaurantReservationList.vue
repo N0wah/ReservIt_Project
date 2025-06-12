@@ -49,7 +49,7 @@ onMounted(async () => {
   // Optionnel : récupérer les users en batch si besoin, ici on fait un GET par réservation
   for (const reservation of reservationsRaw) {
     // Ajoute l'objet restaurant
-    reservation.restaurant = restaurantMap[reservation.restaurant] || reservation.restaurant
+    reservation.restaurant = restaurantMap[reservation.restaurant] || restaurantMap[reservation.restaurant_id] || null
     // Ajoute l'objet user
     try {
       const userRes = await axios.get(`${apiUrl}/users/${reservation.user_id}/`)
