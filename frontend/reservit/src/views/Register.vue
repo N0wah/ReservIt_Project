@@ -75,7 +75,7 @@
           <label class="mb-2 text-white">Choose your avatar</label>
           <div class="flex flex-wrap gap-4 justify-center mb-2">
             <img
-              v-for="n in 6" :key="n"
+              v-for="n in 4" :key="n"
               :src="`/img/avatar/avatar${n}.png`"
               :alt="`Avatar ${n}`"
               :class="[
