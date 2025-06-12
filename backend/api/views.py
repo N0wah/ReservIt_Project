@@ -15,11 +15,6 @@ class RestaurantByOwnerView(APIView):
         restaurants = Restaurant.objects.filter(owner_id=owner_id)
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
-    
-class ReservationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Reservation.objects.all()
-    serializer_class = ReservationSerializer
-    lookup_field = 'id'
 
 class UsersListView(generics.ListCreateAPIView):
     queryset = User.objects.all()

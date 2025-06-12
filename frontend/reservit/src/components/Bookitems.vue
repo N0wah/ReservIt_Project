@@ -69,11 +69,9 @@ const openMap = () => {
 }
 
 const showDetails = ref(false)
-
 const toggleDetails = () => {
   showDetails.value = !showDetails.value
 }
-
 const showModal = ref(false)
 
 const handleConfirm = async () => {
