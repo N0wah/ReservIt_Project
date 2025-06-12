@@ -12,10 +12,10 @@
         <p><span class="text-orange-400">A</span>dmin</p>
         </div>
         <ul class="list-none flex flex-col gap-2 z-0">
-        <li>
-            <Bookitems :lat="48.8584" :lng="2.2945"  />
-        </li>
-        </ul>
+      <li v-for="reservation in reservations" :key="reservation.id">
+        <Bookitems :reservation="reservation" />
+      </li>
+    </ul>
 
 
 
@@ -23,9 +23,25 @@
     <RestaurantNav />
 </template>
 <script setup>
+import { ref, onMounted } from 'vue'
 import Bookitems from '@/components/RestaurantBookitems.vue';
-import NavComposant from '@/components/NavComposant.vue';
 import RestaurantNav from '@/components/RestaurantNav.vue';
+import axios from 'axios'
 
+const reservations = ref([])
+const apiUrl = import.meta.env.VITE_API_URL;
 
+onMounted(async () => {
+  const userData = localStorage.getItem('user')
+  if (!userData) return
+  const user = JSON.parse(userData)
+  // Récupère les restaurants de l'admin
+  const restRes = await axios.get(`${apiUrl}/restaurants/?owner_id=${user.id}`)
+  const adminRestaurants = restRes.data
+  if (!Array.isArray(adminRestaurants) || adminRestaurants.length === 0) return
+  const restaurantIds = adminRestaurants.map(r => r.id)
+  // Récupère toutes les réservations pour ces restaurants
+  const resRes = await axios.get(`${apiUrl}/reservations/`)
+  reservations.value = resRes.data.filter(r => restaurantIds.includes(r.restaurant))
+})
 </script>

@@ -144,8 +144,9 @@ const handleRegister = async () => {
       name: name.value,
       family_name: familyName.value,
       email: email.value,
-      password: password.value,
-      is_admin: false
+      password_hash: password.value,
+      is_admin: false, 
+      created_at: new Date().toISOString()
     })
     localStorage.setItem('user', JSON.stringify(response.data))
     errorMessage.value = ''
