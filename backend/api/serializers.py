@@ -29,7 +29,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
-        fields = ['id', 'owner_id', 'name', 'address', 'description', 'phone_number', 'email', 'images']
+        fields = ['id', 'owner_id', 'name', 'address', 'description', 'phone_number', 'email', 'images', 'opening_days']
 
 class TableSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,4 +39,4 @@ class TableSerializer(serializers.ModelSerializer):
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = ['id', 'user_id', 'restaurant', 'table_id', 'reservation_time', 'reservation_date', "guest_count", 'status', 'information', 'opening_days']
+        fields = ['id', 'user_id', 'restaurant', 'table_id', 'reservation_time', 'reservation_date', "guest_count", 'status', 'information']
