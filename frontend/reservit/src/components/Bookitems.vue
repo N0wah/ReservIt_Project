@@ -45,38 +45,37 @@
 import { MapPinIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 import Confirmation from '@/components/Confirmation.vue'
+import axios from 'axios'
 
-defineProps({
-  label: {
-    type: String,
-    default: 'Voir sur la carte'
-  },
-  lat: {
-    type: Number,
-    required: true
-  },
-  lng: {
-    type: Number,
+const props = defineProps({
+  reservation: {
+    type: Object,
     required: true
   }
 })
 
 const openMap = () => {
-  const url = `https://www.google.com/maps?q=${props.lat},${props.lng}`
-  window.open(url, '_blank')
+  if (props.reservation && props.reservation.restaurant && props.reservation.restaurant.lat && props.reservation.restaurant.lng) {
+    const url = `https://www.google.com/maps?q=${props.reservation.restaurant.lat},${props.reservation.restaurant.lng}`
+    window.open(url, '_blank')
+  }
 }
 
 const showDetails = ref(false)
-
 const toggleDetails = () => {
   showDetails.value = !showDetails.value
 }
-
 const showModal = ref(false)
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   showModal.value = false
-  console.log('Action confirmée !')
+  try {
+    // Call the backend route to delete reservation and free the table
+    await axios.delete(`${import.meta.env.VITE_API_URL}/reservations/delete_and_free/${props.reservation.id}/`)
+    window.location.reload()
+  } catch (e) {
+    alert('Failed to cancel the reservation or free the table.')
+  }
 }
 
 const handleCancel = () => {

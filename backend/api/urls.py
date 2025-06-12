@@ -9,7 +9,6 @@ urlpatterns = [
     path('restaurants/owner_id/<int:owner_id>/', views.RestaurantByOwnerView.as_view(), name='restaurant-by-owner'),
     path('tables/', views.TableListCreate.as_view(), name='table-list'),
     path('reservations/', views.ReservationListCreate.as_view(), name='reservation-list'),
-    path('reservations/<int:reservation_id>/', views.ReservationRetrieveUpdateDestroy.as_view(), name='reservation-detail'),
     path('favorites/', views.FavoriteListCreate.as_view(), name='favorite-list'),
     path('favorites/<int:id>/', views.FavoriteRetrieveUpdateDestroy.as_view(), name='favorite-detail'),
     path('login/', views.LoginView.as_view(), name='login'),
