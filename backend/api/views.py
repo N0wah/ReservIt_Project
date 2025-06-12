@@ -19,7 +19,7 @@ class RestaurantByOwnerView(APIView):
 class ReservationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
-    lookup_field = 'id'
+    lookup_field = 'reservation_id'
 
 class UsersListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
