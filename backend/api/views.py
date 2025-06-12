@@ -3,6 +3,9 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import viewsets
+from .models import Reservation
+from .serializers import ReservationSerializer
 
 from .models import User, Restaurant, Table, Favorite, Reservation
 from .serializers import RestaurantSerializer, TableSerializer, ReservationSerializer, FavoriteSerializer, UserSerializer
@@ -13,14 +16,10 @@ class RestaurantByOwnerView(APIView):
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
     
-class ReservationByIdView(APIView):
-    def get(self, request, reservation_id):
-        try:
-            reservation = Reservation.objects.get(id=reservation_id)
-            serializer = ReservationSerializer(reservation)
-            return Response(serializer.data)
-        except Reservation.DoesNotExist:
-            return Response({'error': 'Reservation not found'}, status=status.HTTP_404_NOT_FOUND)
+class ReservationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+    lookup_field = 'id'
 
 class UsersListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
