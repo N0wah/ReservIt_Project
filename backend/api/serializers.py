@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
     password_hash = serializers.CharField(write_only=False, required=True)
+    avatar_path = serializers.CharField(required=False, allow_blank=True)
 
     def create(self, validated_data):
         if 'password_hash' in validated_data:

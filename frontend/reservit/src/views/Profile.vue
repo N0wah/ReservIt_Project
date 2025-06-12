@@ -11,7 +11,7 @@
 
       <div class="flex flex-col w-full items-center text-white">
         <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center overflow-hidden mb-2">
-          <img v-if="user && user.avatar" :src="user.avatar" alt="User avatar" class="w-full h-full object-cover" />
+          <Avatar v-if="user" :src="user?.avatar_path" :size="128" />
         </div>
         <p>{{ user?.name || 'Name' }}</p>
       </div>
@@ -64,6 +64,7 @@ import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { CalendarIcon } from '@heroicons/vue/24/solid'
 import BookitemsBooked from '@/components/BookitemsBooked.vue'
+import Avatar from '@/components/Avatar.vue'
 import axios from 'axios'
 
 const router = useRouter()
@@ -77,8 +78,13 @@ onMounted(async () => {
   if (!token || !userData) {
     router.push('/login')
   } else {
-    user.value = JSON.parse(userData)
     try {
+      // Fix: handle case where userData is already an object (not a string)
+      let parsedUser = userData
+      if (typeof userData === 'string') {
+        parsedUser = JSON.parse(userData)
+      }
+      user.value = parsedUser
       const res = await axios.get(`${apiUrl}/reservations/?user_id=${user.value.id}`)
       const reservationsWithRestaurant = await Promise.all(res.data.map(async reservation => {
         try {
@@ -94,6 +100,24 @@ onMounted(async () => {
     }
   }
 })
+
+onMounted(async () => {
+  const userData = localStorage.getItem('user')
+  console.log('Raw user data:', userData)
+
+  let parsedUser = null
+  if (typeof userData === 'string') {
+    try {
+      parsedUser = JSON.parse(userData)
+      console.log('Parsed user:', parsedUser)
+    } catch (e) {
+      console.error('Failed to parse user:', e)
+    }
+  }
+
+  user.value = parsedUser
+})
+
 
 const filteredReservations = computed(() =>
   reservations.value.filter(r => r && r.status && r.status.toLowerCase() === 'fini')
