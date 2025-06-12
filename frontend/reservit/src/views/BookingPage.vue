@@ -291,6 +291,9 @@ function handleReserve() {
   })
     .then(() => {
       showSuccess.value = true
+      // Update the table in availableTables to is_reserved = true
+      const reservedTable = availableTables.value.find(t => t.id === tableId)
+      if (reservedTable) reservedTable.is_reserved = true
     })
     .catch((error) => {
       // Remove the alert with restrantId (typo and undefined)
