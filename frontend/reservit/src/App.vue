@@ -4,19 +4,26 @@
       <router-view />
       <!-- Navbar classique : affichée pour tous sauf admin et sauf sur intro -->
       <Navbar
-        v-if="route.name !== '/intro' && !user?.is_admin"
+        v-if="route.name !== '/intro' && user.value.is_admin !== true"
       />
       <!-- Navbar restaurant : affichée uniquement pour admin -->
-      <RestaurantFooter v-if="user?.is_admin === true" />
+      <RestaurantFooter v-if="user.value.is_admin === true" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 import Navbar from './components/NavComposant.vue'
 import RestaurantFooter from './components/RestaurantNav.vue'
 
 const route = useRoute()
-const user = JSON.parse(localStorage.getItem('user') || '{}')
+const user = computed(() => {
+  try {
+    return JSON.parse(localStorage.getItem('user') || '{}')
+  } catch {
+    return {}
+  }
+})
 </script>
