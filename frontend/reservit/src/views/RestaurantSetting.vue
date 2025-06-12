@@ -9,7 +9,7 @@
     </div>
 
     <!-- Formulaire de gestion -->
-    <form class="space-y-6">
+    <form class="space-y-6" @submit="handleSubmit">
       <!-- Nom du restaurant -->
       <div>
         <label class="block text-sm text-gray-300 mb-1">Nom du restaurant</label>
@@ -104,6 +104,16 @@
         </div>
       </div>
 
+      <!-- Email et Téléphone -->
+      <div>
+        <label class="block text-sm text-gray-300 mb-1">Email</label>
+        <input type="email" v-model="email" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : contact@restaurant.com" />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-300 mb-1">Téléphone</label>
+        <input type="text" v-model="phoneNumber" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : 0601020304" />
+      </div>
+
       <!-- Bouton Enregistrer -->
       <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-full">
         Enregistrer les modifications
@@ -115,23 +125,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import RestaurantNav from '@/components/RestaurantNav.vue'
+import axios from 'axios'
 
 const name = ref('')
 const openTime = ref('')
 const closeTime = ref('')
 const description = ref('')
+const address = ref('')
+const city = ref('')
+const country = ref('')
+const email = ref('')
+const phoneNumber = ref('')
 const selectedDays = ref([])
 const photoError = ref('')
 
-const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+const days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
 
 // Simule les photos déjà enregistrées (remplace par ton fetch API si besoin)
 const savedPhotos = ref([
   // { url: 'https://via.placeholder.com/150' },
   // { url: 'https://via.placeholder.com/150/0000FF' }
 ])
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
+const selectedDaysString = computed(() => selectedDays.value.map(i => days[i]).join(';'))
+print(selectedDaysString.value)
 
 const toggleDay = (index) => {
   if (selectedDays.value.includes(index)) {
@@ -167,4 +188,36 @@ const editPhoto = (idx) => {
   // Ici tu peux ouvrir une modale ou un input pour remplacer la photo
   alert('Fonction de modification à implémenter')
 }
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const userData = localStorage.getItem('user');
+  if (!userData) {
+    alert('Vous devez être connecté pour créer un restaurant.');
+    return;
+  }
+  const user = JSON.parse(userData);
+  const payload = {
+    name: name.value,
+    address: address.value,
+    city: city.value,
+    country: country.value,
+    description: description.value,
+    email: email.value,
+    phone_number: phoneNumber.value,
+    images: savedPhotos.value.length > 0 ? savedPhotos.value.map(p => p.url).join(',') : '',
+    owner_id: user.id,
+    opening_days: selectedDaysString.value
+  };
+  try {
+    await axios.post(`${apiUrl}/restaurants/`, payload);
+    alert('Restaurant créé avec succès !');
+  } catch (err) {
+    if (err.response && err.response.data) {
+      alert('Erreur: ' + JSON.stringify(err.response.data));
+    } else {
+      alert('Erreur lors de la création du restaurant.');
+    }
+  }
+};
 </script>
