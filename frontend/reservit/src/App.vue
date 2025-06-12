@@ -4,7 +4,7 @@
       <router-view />
       <!-- Navbar classique : affichée pour tous sauf admin et sauf sur intro -->
       <Navbar
-        v-if="route.name !== 'Intro' && route.name !== 'LoadingScreen' && !(user.value && user.value.is_admin === true)"
+        v-if="route.name !== 'Intro' && route.name !== 'Loading' && !(user.value && user.value.is_admin === true)"
       />
       <!-- Navbar restaurant : affichée uniquement pour admin -->
       <RestaurantFooter v-if="user.value && user.value.is_admin === true" />
@@ -14,7 +14,7 @@
 
 <script setup>
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import Navbar from './components/NavComposant.vue'
 import RestaurantFooter from './components/RestaurantNav.vue'
 
@@ -29,8 +29,8 @@ function getUser() {
   }
 }
 
-// Met à jour user à chaque navigation
-watch(route, () => {
+// Met à jour user à chaque rendu (plus fiable que watch sur route)
+watchEffect(() => {
   user.value = getUser()
 })
 </script>
