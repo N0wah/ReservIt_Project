@@ -155,7 +155,8 @@ function goToBooking() {
   localStorage.setItem('selectedRestaurant', JSON.stringify({
     name: restaurant.value.name,
     address: restaurant.value.address,
-    cities: restaurant.value.cities || restaurant.value.city || ''
+    cities: restaurant.value.cities || restaurant.value.city || '',
+    id: restaurant.value.id // Enregistre aussi l'id du restaurant
   }))
   router.push({ name: 'BookingPage', params: { id: restaurant.value.id } })
 }
