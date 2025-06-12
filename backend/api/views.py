@@ -12,6 +12,15 @@ class RestaurantByOwnerView(APIView):
         restaurants = Restaurant.objects.filter(owner_id=owner_id)
         serializer = RestaurantSerializer(restaurants, many=True)
         return Response(serializer.data)
+    
+class ReservationByIdView(APIView):
+    def get(self, request, reservation_id):
+        try:
+            reservation = Reservation.objects.get(id=reservation_id)
+            serializer = ReservationSerializer(reservation)
+            return Response(serializer.data)
+        except Reservation.DoesNotExist:
+            return Response({'error': 'Reservation not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class UsersListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
