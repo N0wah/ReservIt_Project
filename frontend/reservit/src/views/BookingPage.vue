@@ -191,12 +191,13 @@ onMounted(async () => {
     loadingTables.value = true
     try {
       const res = await axios.get(`${apiUrl}/tables/?restaurant_id=${route.params.id}`)
-      availableTables.value = res.data.filter(table => !table.is_reserved)
+      // Only show tables that are not reserved
+      availableTables.value = res.data.filter(table => table.is_reserved === false)
       if (availableTables.value.length > 0) {
         selectedTableId.value = availableTables.value[0].id
       }
     } catch (e) {
-      tableError.value = 'Erreur lors du chargement des tables.'
+      tableError.value = 'Error loading tables.'
       availableTables.value = []
     } finally {
       loadingTables.value = false
