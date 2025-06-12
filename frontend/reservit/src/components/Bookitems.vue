@@ -7,15 +7,16 @@
   </div>
   <div class="w-[150px]">
     <h1 class="text-sm sm:text-base md:text-lg ">
-      {{ reservation && reservation.restaurant ? (reservation.restaurant.name || 'Restaurant') : 'Restaurant' }}, {{ reservation && reservation.restaurant ? (reservation.restaurant.cities || '') : '' }}
+      <span >{{ name }}</span>
     </h1>
-    <p class="text-[#BCBCBC] font-light text-base">{{ reservation.guest_count }} persons</p>
+    <p class="text-[#BCBCBC] font-light text-base">Réservé par : {{ userName || 'Utilisateur inconnu' }}</p>
+    <p class="text-[#BCBCBC] font-light text-base">{{ guestCount }} persons</p>
   </div>
     </div>
   <div class="flex flex-col items-end">
-    <p class="font-thin">{{ reservation.reservation_date }}</p>
-    <p class="font-thin">{{ reservation.reservation_time }}</p>
-    <p class="font-thin">Status: {{ reservation.status }}</p>
+    <p class="font-thin">{{ reservation_date }}</p>
+    <p class="font-thin">{{ reservation_time }}</p>
+    <p class="font-thin">Status: {{ status }}</p>
   </div>
 </div>
 
@@ -48,48 +49,14 @@
 
 </template>
 <script setup>
-import { MapPinIcon } from '@heroicons/vue/24/solid'
-import { ref } from 'vue'
-import Confirmation from '@/components/Confirmation.vue'
-import axios from 'axios'
-
-// Props update
-const props = defineProps({
-  reservation: {
-    type: Object,
-    required: true
-  }
+defineProps({
+  name: String,
+  reservation: Object,
+  userName: String,
+  guestCount: Number,
+  reservation_date: String,
+  reservation_time: String,
+  status: String
 })
-
-const openMap = () => {
-  if (props.reservation && props.reservation.restaurant && props.reservation.restaurant.lat && props.reservation.restaurant.lng) {
-    const url = `https://www.google.com/maps?q=${props.reservation.restaurant.lat},${props.reservation.restaurant.lng}`
-    window.open(url, '_blank')
-  }
-}
-
-const showDetails = ref(false)
-const toggleDetails = () => {
-  showDetails.value = !showDetails.value
-}
-const showModal = ref(false)
-
-const handleConfirm = async () => {
-  showModal.value = false
-  try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/reservations/${props.reservation.id}/`)
-    // Set the table as not reserved if table_id is present
-    if (props.reservation.table_id) {
-      await axios.patch(`${import.meta.env.VITE_API_URL}/tables/${props.reservation.table_id}/`, { is_reserved: false })
-    }
-    window.location.reload()
-  } catch (e) {
-    alert('Failed to cancel the reservation or update the table.')
-  }
-}
-
-const handleCancel = () => {
-  showModal.value = false
-}
 </script>
 

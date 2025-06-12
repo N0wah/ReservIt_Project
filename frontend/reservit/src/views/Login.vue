@@ -81,12 +81,9 @@ const handleLogin = async () => {
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
       if (response.data.user.is_admin === true) {
-        showRestaurantNav.value = true
-        router.push('/dashboard') // Redirige vers dashboard admin
-        window.location.reload()
+        window.location.replace('/dashboard')
       } else {
-        router.push('/profile')
-        window.location.reload()
+        window.location.replace('/profile')
       }
     } else {
       errorMessage.value = 'Invalid credentials'
