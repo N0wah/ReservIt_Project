@@ -10,41 +10,41 @@
 
     <!-- Formulaire de gestion -->
     <form class="space-y-6" @submit="handleSubmit">
-      <!-- Nom du restaurant -->
+      <!-- Restaurant name -->
       <div>
-        <label class="block text-sm text-gray-300 mb-1">Nom du restaurant</label>
-        <input type="text" v-model="name" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : La Table d'Or" />
+        <label class="block text-sm text-gray-300 mb-1">Restaurant name</label>
+        <input type="text" v-model="name" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="e.g. The Golden Table" />
       </div>
 
       <!-- Adresse, Ville, Pays -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label class="block text-sm text-gray-300 mb-1">Adresse</label>
-          <input type="text" v-model="address" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : 123 Rue Principale" />
+          <label class="block text-sm text-gray-300 mb-1">Address</label>
+          <input type="text" v-model="address" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="e.g. 123 Main Street" />
         </div>
         <div>
-          <label class="block text-sm text-gray-300 mb-1">Ville</label>
-          <input type="text" v-model="city" class="w-1/2 bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : Paris" />
+          <label class="block text-sm text-gray-300 mb-1">City</label>
+          <input type="text" v-model="city" class="w-1/2 bg-white text-black rounded-xl px-4 py-2" placeholder="e.g. Paris" />
         </div>
         <div>
-          <label class="block text-sm text-gray-300 mb-1">Pays</label>
-          <input type="text" v-model="country" class="w-1/2 bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : France" />
+          <label class="block text-sm text-gray-300 mb-1">Country</label>
+          <input type="text" v-model="country" class="w-1/2 bg-white text-black rounded-xl px-4 py-2" placeholder="e.g. France" />
         </div>
       </div>
 
-      <!-- Heures d’ouverture -->
+      <!-- Opening hours -->
       <div>
-        <label class="block text-sm text-gray-300 mb-1">Heures d’ouverture</label>
+        <label class="block text-sm text-gray-300 mb-1">Opening hours</label>
         <div class="flex gap-2">
           <input type="time" v-model="openTime" class="bg-white text-black rounded-xl px-3 py-2" />
-          <span class="text-gray-400">à</span>
+          <span class="text-gray-400">to</span>
           <input type="time" v-model="closeTime" class="bg-white text-black rounded-xl px-3 py-2" />
         </div>
       </div>
 
-      <!-- Jours d’ouverture -->
+      <!-- Opening days -->
       <div>
-        <label class="block text-sm text-gray-300 mb-1">Jours d’ouverture</label>
+        <label class="block text-sm text-gray-300 mb-1">Opening days</label>
         <div class="flex flex-wrap gap-2">
           <button
             v-for="(day, i) in days"
@@ -65,7 +65,7 @@
       <!-- Description -->
       <div>
         <label class="block text-sm text-gray-300 mb-1">Description</label>
-        <textarea v-model="description" class="w-full bg-white text-black rounded-xl px-4 py-2 h-24" placeholder="Décris ton restaurant ici..."></textarea>
+        <textarea v-model="description" class="w-full bg-white text-black rounded-xl px-4 py-2 h-24" placeholder="Describe your restaurant here..."></textarea>
       </div>
 
       <!-- Photos -->
@@ -80,7 +80,7 @@
         />
         <div v-if="photoError" class="text-red-400 text-sm mt-1">{{ photoError }}</div>
 
-        <!-- Prévisualisation des photos enregistrées -->
+        <!-- Preview of saved photos -->
         <div class="mt-4 grid grid-cols-3 gap-4">
           <div
             v-for="(photo, index) in savedPhotos"
@@ -104,19 +104,22 @@
         </div>
       </div>
 
-      <!-- Email et Téléphone -->
+      <!-- Email and Phone -->
       <div>
         <label class="block text-sm text-gray-300 mb-1">Email</label>
-        <input type="email" v-model="email" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : contact@restaurant.com" />
+        <input type="email" v-model="email" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="e.g. contact@restaurant.com" />
       </div>
       <div>
-        <label class="block text-sm text-gray-300 mb-1">Téléphone</label>
-        <input type="text" v-model="phoneNumber" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : 0601020304" />
+        <label class="block text-sm text-gray-300 mb-1">Phone</label>
+        <input type="text" v-model="phoneNumber" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="e.g. 0601020304" />
       </div>
 
-      <!-- Bouton Enregistrer -->
+      <!-- Save button -->
       <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-full">
-        Enregistrer les modifications
+        Save changes
+      </button>
+      <button type="button" @click="logout" class="w-full mt-2 bg-red-500 hover:bg-red-600 text-white font-medium py-3 rounded-full">
+        Logout
       </button>
     </form>
   </div>
@@ -125,7 +128,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import RestaurantNav from '@/components/RestaurantNav.vue'
 import axios from 'axios'
 
@@ -141,9 +144,9 @@ const phoneNumber = ref('')
 const selectedDays = ref([])
 const photoError = ref('')
 
-const days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-// Simule les photos déjà enregistrées (remplace par ton fetch API si besoin)
+// Simulate already saved photos (replace with your API fetch if needed)
 const savedPhotos = ref([
   // { url: 'https://via.placeholder.com/150' },
   // { url: 'https://via.placeholder.com/150/0000FF' }
@@ -151,8 +154,7 @@ const savedPhotos = ref([
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const selectedDaysString = computed(() => selectedDays.value.map(i => days[i]).join(';'))
-print(selectedDaysString.value)
+const selectedDaysString = computed(() => selectedDays.value.map(i => days[i]).join(','))
 
 const toggleDay = (index) => {
   if (selectedDays.value.includes(index)) {
@@ -165,12 +167,12 @@ const toggleDay = (index) => {
 const handlePhotoChange = (event) => {
   const files = Array.from(event.target.files)
   if (files.length + savedPhotos.value.length > 3) {
-    photoError.value = 'Vous ne pouvez télécharger que 3 photos maximum.'
+    photoError.value = 'You can only upload up to 3 photos.'
     event.target.value = ''
     return
   }
   photoError.value = ''
-  // Ajoute les nouvelles photos à la liste (affichage local, à adapter pour upload réel)
+  // Add new photos to the list (local display, adapt for real upload)
   files.forEach(file => {
     const reader = new FileReader()
     reader.onload = (e) => {
@@ -185,15 +187,15 @@ const deletePhoto = (idx) => {
 }
 
 const editPhoto = (idx) => {
-  // Ici tu peux ouvrir une modale ou un input pour remplacer la photo
-  alert('Fonction de modification à implémenter')
+  // Here you can open a modal or input to replace the photo
+  alert('Edit photo feature to be implemented')
 }
 
 const handleSubmit = async (e) => {
   e.preventDefault();
   const userData = localStorage.getItem('user');
   if (!userData) {
-    alert('Vous devez être connecté pour créer un restaurant.');
+    alert('You must be logged in to create or edit a restaurant.');
     return;
   }
   const user = JSON.parse(userData);
@@ -210,14 +212,59 @@ const handleSubmit = async (e) => {
     opening_days: selectedDaysString.value
   };
   try {
-    await axios.post(`${apiUrl}/restaurants/`, payload);
-    alert('Restaurant créé avec succès !');
+    // Check if the user already has a restaurant
+    const res = await axios.get(`${apiUrl}/restaurants/owner_id/${user.id}/`);
+    if (Array.isArray(res.data) && res.data.length > 0) {
+      // Already has one, update the first found
+      const restaurantId = res.data[0].id;
+      await axios.put(`${apiUrl}/restaurants/${restaurantId}/`, payload);
+      alert('Restaurant updated successfully!');
+    } else {
+      // Otherwise, create
+      await axios.post(`${apiUrl}/restaurants/`, payload);
+      alert('Restaurant created successfully!');
+    }
   } catch (err) {
     if (err.response && err.response.data) {
-      alert('Erreur: ' + JSON.stringify(err.response.data));
+      alert('Error: ' + JSON.stringify(err.response.data));
     } else {
-      alert('Erreur lors de la création du restaurant.');
+      alert('Error while creating or updating the restaurant.');
     }
   }
 };
+
+const logout = () => {
+  localStorage.removeItem('user');
+  window.location.href = '/login';
+}
+
+onMounted(async () => {
+  const userData = localStorage.getItem('user');
+  if (!userData) return;
+  const user = JSON.parse(userData);
+  try {
+    const res = await axios.get(`${apiUrl}/restaurants/owner_id/${user.id}/`);
+    if (Array.isArray(res.data) && res.data.length > 0) {
+      const r = res.data[0];
+      name.value = r.name || '';
+      address.value = r.address || '';
+      city.value = r.city || '';
+      country.value = r.country || '';
+      description.value = r.description || '';
+      email.value = r.email || '';
+      phoneNumber.value = r.phone_number || '';
+      // Fill opening days
+      if (r.opening_days) {
+        const daysArr = r.opening_days.split(',').map(d => d.trim());
+        selectedDays.value = daysArr.map(day => days.indexOf(day)).filter(i => i !== -1);
+      }
+      // Fill images if present
+      if (r.images) {
+        savedPhotos.value = r.images.split(',').map(url => ({ url }));
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+});
 </script>

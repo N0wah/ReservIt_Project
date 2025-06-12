@@ -63,9 +63,9 @@
     <!-- Table Selection -->
     <section class="w-full">
       <h2 class="text-xl mb-2">Table</h2>
-      <div v-if="loadingTables" class="text-gray-400">Chargement des tables...</div>
+      <div v-if="loadingTables" class="text-gray-400">Loading tables...</div>
       <div v-else-if="tableError" class="text-red-400">{{ tableError }}</div>
-      <div v-else-if="availableTables.length === 0" class="text-gray-400">Aucune table disponible pour ce créneau.</div>
+      <div v-else-if="availableTables.length === 0" class="text-gray-400">No table available for this slot.</div>
       <div v-else class="flex flex-wrap gap-2">
         <button
           v-for="table in availableTables"
@@ -93,7 +93,7 @@
         @click="handleLogout"
         class="bg-red-500 hover:bg-red-600 text-white font-light text-base py-2 px-6 rounded-full transition duration-200 shadow-md mt-2"
       >
-        Déconnexion
+        Logout
       </button>
     </div>
   </div>

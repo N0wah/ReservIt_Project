@@ -11,17 +11,15 @@
           <div class="flex justify-center gap-4">
             <button
               @click="cancel"
-              class="px-8 py-2 bg-[#A6FF94] text-black rounded-full hover:bg-gray-300 shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]
-"
+              class="px-8 py-2 bg-[#A6FF94] text-black rounded-full hover:bg-gray-300 shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]"
             >
               No
             </button>
             <button
               @click="confirm"
-              class="px-8 py-2 bg-[#FF5252] text-black rounded-full hover:bg-orange-600 shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]
-"
+              class="px-8 py-2 bg-[#FF5252] text-black rounded-full hover:bg-orange-600 shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]"
             >
-              YES
+              Yes
             </button>
           </div>
         </div>
@@ -40,7 +38,7 @@
     },
     message: {
       type: String,
-      default: 'Êtes-vous sûr de vouloir continuer ?'
+      default: 'Are you sure you want to continue?'
     }
   })
   
@@ -50,14 +48,15 @@
   const cancel = () => emit('cancel')
 
   const disableScroll = () => document.body.style.overflow = 'hidden'
-    const enableScroll = () => document.body.style.overflow = ''
+  const enableScroll = () => document.body.style.overflow = ''
 
   watch(() => props.visible, (val) => {
-  document.body.style.overflow = val ? 'hidden' : ''
-    })
+    if (val) disableScroll()
+    else enableScroll()
+  })
 
-    onBeforeUnmount(() => {
-  enableScroll()
-})
+  onMounted(() => {
+    if (props.visible) disableScroll()
+  })
+  onBeforeUnmount(enableScroll)
   </script>
-  

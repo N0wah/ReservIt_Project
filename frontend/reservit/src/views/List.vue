@@ -8,19 +8,9 @@
         </h2>
       </div>
 
-      <div v-if="!isAuthenticated" class="text-white text-center w-full h-full mt-[-15vh] flex flex-col items-center justify-center gap-4">
-        Please log in to view your reservations.
-        <router-link
-          to="/login"
-          class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-full transition duration-200"
-        >
-          Log in
-        </router-link>
-      </div>
-
-      <ul v-else class="list-none flex flex-col gap-2 z-0">
+      <ul v-if="isAuthenticated" class="list-none flex flex-col gap-2 z-0">
         <li v-for="reservation in reservations" :key="reservation.id">
-          <Bookitems :reservation="reservation" />
+          <Bookitems :reservation="reservation" />    
         </li>
       </ul>
     </div>

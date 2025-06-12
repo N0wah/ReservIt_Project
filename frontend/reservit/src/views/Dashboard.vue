@@ -15,13 +15,13 @@
     <RestaurantGraphic />
         </section>
         <section>
-    <h1 class="font-Poppins text-lg">Lastest Customers Reservation</h1>
+    <h1 class="font-Poppins text-lg">Latest Customers Reservation</h1>
     <ul>
-        <!-- Affichage conditionnel pour éviter les erreurs de rendu -->
+        <!-- Conditional display to avoid rendering errors -->
         <li v-if="Array.isArray(reservations) && reservations.length" class="list-none flex flex-col gap-2 z-0">
             <RestaurantBookitems v-for="reservation in reservations" :key="reservation.id" :reservation="reservation" />
         </li>
-        <li v-else class="text-gray-400">Aucune réservation récente.</li>
+        <li v-else class="text-gray-400">No recent reservations.</li>
     </ul>
     </section>
     </div>

@@ -12,11 +12,11 @@
 
 
   
-      <!-- Titre -->
+      <!-- Title -->
       <h2 class="text-start mb-4 text-2xl  text-white"><span class="text-orange-400">L</span>ogin to your account</h2>
 
   
-      <!-- Formulaire -->
+      <!-- Form -->
       <form @submit.prevent="handleLogin" class="space-y-10">
         <div>
           <input
@@ -29,7 +29,6 @@
             class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-orange-500 focus:border-orange-500 bg-white"
           />
         </div>
-  
         <div>
           <input
             v-model="password"
@@ -41,8 +40,6 @@
             class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-orange-500 focus:border-orange-500 bg-white"
           />
         </div>
-  
-
         <div>
           <button
             type="submit"
@@ -52,15 +49,11 @@
           </button>
         </div>
       </form>
-  
-      
+      <p class="fixed bottom-4 w-full text-center text-sm text-white">
+        No account?
+        <router-link to="/register" class="underline text-orange-400">Create one</router-link>
+      </p>
     </div>
-    <p class="fixed bottom-4 w-full text-center text-sm text-white">
-  No account ?
-  <router-link to="/register" class="font-medium text-orange-500 hover:text-orange-600 underline">
-    Register
-  </router-link>
-</p>
   </template>
   
   <script setup>
@@ -87,10 +80,10 @@
         localStorage.setItem('user', JSON.stringify(response.data.user))
         router.push('/profile')
       } else {
-        errorMessage.value = 'Identifiants invalides'
+        errorMessage.value = 'Invalid credentials'
       }
     } catch (error) {
-      errorMessage.value = 'Erreur de connexion'
+      errorMessage.value = 'Connection error'
     }
   }
   </script>
