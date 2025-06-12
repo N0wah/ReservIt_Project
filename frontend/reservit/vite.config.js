@@ -20,6 +20,7 @@ export default defineConfig({
         short_name: 'ReservIt',
         start_url: '/',
         display: 'standalone',
+        orientation: 'portrait',
         background_color: '#242424',
         theme_color: '#242424',
         icons: [
