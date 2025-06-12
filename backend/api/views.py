@@ -43,6 +43,12 @@ class ReservationListCreate(generics.ListCreateAPIView):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
 
+class ReservationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+    lookup_field = 'id'
+
+
 class FavoriteListCreate(generics.ListCreateAPIView):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
