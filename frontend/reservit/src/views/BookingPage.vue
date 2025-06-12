@@ -288,7 +288,7 @@ function handleReserve() {
       showSuccess.value = true
     })
     .catch((error) => {
-      alert(restrantId + ' ' + tableId + ' ' + formattedDate + ' ' + selectedTime.value)
+      // Remove the alert with restrantId (typo and undefined)
       if (error.response && error.response.data) {
         alert('Error: ' + JSON.stringify(error.response.data))
       } else {
