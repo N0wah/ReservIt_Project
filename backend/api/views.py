@@ -39,10 +39,11 @@ class TableListCreate(generics.ListCreateAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
 
-class TableRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Table.objects.all()
-    serializer_class = TableSerializer
-    lookup_field = 'id'
+class TableByRestaurantView(APIView):
+    def get(self, request, restaurant_id):
+        tables = Table.objects.filter(restaurant_id=restaurant_id)
+        serializer = TableSerializer(tables, many=True)
+        return Response(serializer.data)
 
 class ReservationListCreate(generics.ListCreateAPIView):
     queryset = Reservation.objects.all()
