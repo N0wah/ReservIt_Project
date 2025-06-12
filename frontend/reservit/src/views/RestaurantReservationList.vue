@@ -35,13 +35,14 @@ onMounted(async () => {
   const userData = localStorage.getItem('user')
   if (!userData) return
   const user = JSON.parse(userData)
-  // Récupère les restaurants de l'admin
-  const restRes = await axios.get(`${apiUrl}/restaurants/?owner_id=${user.id}`)
+  // Récupère les restaurants de l'admin via la bonne route
+  const restRes = await axios.get(`${apiUrl}/restaurants/owner_id/${user.id}/`)
   const adminRestaurants = restRes.data
   if (!Array.isArray(adminRestaurants) || adminRestaurants.length === 0) return
   const restaurantIds = adminRestaurants.map(r => r.id)
   // Récupère toutes les réservations pour ces restaurants
   const resRes = await axios.get(`${apiUrl}/reservations/`)
-  reservations.value = resRes.data.filter(r => restaurantIds.includes(r.restaurant))
+  // Filtrage robuste selon la structure des réservations
+  reservations.value = resRes.data.filter(r => restaurantIds.includes(r.restaurant || r.restaurant_id))
 })
 </script>
