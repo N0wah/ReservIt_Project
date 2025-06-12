@@ -82,12 +82,18 @@
     </section>
 
     <!-- Reserve Button -->
-    <div class="w-full flex justify-center">
+    <div class="w-full flex flex-col gap-4 justify-center items-center">
       <button
         @click="handleReserve"
         class="bg-orange-500 w-full hover:bg-orange-600 text-white font-light text-2xl py-3 px-10 rounded-full transition duration-200 shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]"
       >
         Reserve It now
+      </button>
+      <button
+        @click="handleLogout"
+        class="bg-red-500 hover:bg-red-600 text-white font-light text-base py-2 px-6 rounded-full transition duration-200 shadow-md mt-2"
+      >
+        Déconnexion
       </button>
     </div>
   </div>
@@ -260,5 +266,11 @@ function handleReserve() {
         alert('Reservation failed. Please try again.')
       }
     })
+}
+
+function handleLogout() {
+  // Logique de déconnexion
+  localStorage.removeItem('user')
+  // Rediriger ou mettre à jour l'état de l'application si nécessaire
 }
 </script>
