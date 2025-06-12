@@ -39,6 +39,11 @@ class TableListCreate(generics.ListCreateAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
 
+class TableRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
+    lookup_field = 'id'
+
 class ReservationListCreate(generics.ListCreateAPIView):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
