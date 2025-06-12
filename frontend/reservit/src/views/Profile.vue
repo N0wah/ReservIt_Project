@@ -79,7 +79,6 @@ onMounted(async () => {
     router.push('/login')
   } else {
     try {
-      // Fix: handle case where userData is already an object (not a string)
       let parsedUser = userData
       if (typeof userData === 'string') {
         parsedUser = JSON.parse(userData)
