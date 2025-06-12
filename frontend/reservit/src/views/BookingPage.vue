@@ -247,23 +247,63 @@ function handleReserve() {
     alert('Please select a time slot.')
     return
   }
-  // Vous pouvez adapter la récupération de la date, du nombre de personnes, etc.
+  if (!reservationDate.value) {
+    alert('Please select a date.')
+    return
+  }
+  if (!selectedTableId.value) {
+    alert('Please select a table.')
+    return
+  }
+
+  // Format reservation_date as YYYY-MM-DD
+  let formattedDate = ''
+  if (reservationDate.value instanceof Date) {
+    formattedDate = reservationDate.value.toISOString().slice(0, 10)
+  } else if (typeof reservationDate.value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(reservationDate.value)) {
+    formattedDate = reservationDate.value
+  } else {
+    // Try to parse string to Date
+    const d = new Date(reservationDate.value)
+    if (!isNaN(d.getTime())) {
+      formattedDate = d.toISOString().slice(0, 10)
+    } else {
+      alert('Invalid date format. Please select a valid date.')
+      return
+    }
+  }
+
+  // Ensure table_id is a number and not null/undefined
+  const tableId = Number(selectedTableId.value)
+  if (!tableId || isNaN(tableId)) {
+    alert('Please select a valid table.')
+    return
+  }
+
+  // Ensure restaurant is a number (id) and not null/undefined
+  const restaurantId = Number(route.params.id)
+  if (!restaurantId || isNaN(restaurantId)) {
+    alert('Restaurant information is missing.')
+    return
+  }
+
   axios.post(`${apiUrl}/reservations/`, {
     user_id: user.id,
-    restaurant: route.params.id,
-    table_id: selectedTableId.value,
+    restaurant: restaurantId, // must be a number
+    table_id: tableId, // must be a number
     guest_count: guestCount.value,
     reservation_time: selectedTime.value,
-    reservation_date: reservationDate.value,
+    reservation_date: formattedDate,
     status: 'Pending',
-    information: message.value
+    information: message.value || ''
   })
     .then(() => {
       showSuccess.value = true
     })
     .catch((error) => {
+      alert(restrantId + ' ' + tableId + ' ' + formattedDate + ' ' + selectedTime.value)
       if (error.response && error.response.data) {
-        alert('Erreur: ' + JSON.stringify(error.response.data))
+        alert('Error: ' + JSON.stringify(error.response.data))
       } else {
         alert('Reservation failed. Please try again.')
       }
