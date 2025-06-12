@@ -42,7 +42,22 @@ onMounted(async () => {
   const restaurantIds = adminRestaurants.map(r => r.id)
   // Récupère toutes les réservations pour ces restaurants
   const resRes = await axios.get(`${apiUrl}/reservations/`)
-  // Filtrage robuste selon la structure des réservations
-  reservations.value = resRes.data.filter(r => restaurantIds.includes(r.restaurant || r.restaurant_id))
+  let reservationsRaw = resRes.data.filter(r => restaurantIds.includes(r.restaurant || r.restaurant_id))
+
+  // Pour chaque réservation, enrichit avec les infos restaurant et user
+  const restaurantMap = Object.fromEntries(adminRestaurants.map(r => [r.id, r]))
+  // Optionnel : récupérer les users en batch si besoin, ici on fait un GET par réservation
+  for (const reservation of reservationsRaw) {
+    // Ajoute l'objet restaurant
+    reservation.restaurant = restaurantMap[reservation.restaurant] || reservation.restaurant
+    // Ajoute l'objet user
+    try {
+      const userRes = await axios.get(`${apiUrl}/users/${reservation.user_id}/`)
+      reservation.user = userRes.data
+    } catch {
+      reservation.user = {}
+    }
+  }
+  reservations.value = reservationsRaw
 })
 </script>
