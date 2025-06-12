@@ -78,7 +78,11 @@
       if (response.data.token) {
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('user', JSON.stringify(response.data.user))
-        router.push('/profile')
+        if (response.data.user.is_admin === true) {
+          router.push('/dashboard') // Redirige vers dashboard admin
+        } else {
+          router.push('/profile')
+        }
       } else {
         errorMessage.value = 'Invalid credentials'
       }

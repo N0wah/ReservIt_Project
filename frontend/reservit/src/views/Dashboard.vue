@@ -36,6 +36,7 @@ import axios from 'axios'
 
 const reservations = ref([])
 const apiUrl = import.meta.env.VITE_API_URL;
+const user = JSON.parse(localStorage.getItem('user') || '{}')
 
 onMounted(async () => {
   try {
@@ -60,7 +61,8 @@ onMounted(async () => {
         reservation.user = userRes.data
       } catch { reservation.user = {} }
     }
-    reservations.value = reservationsRaw
+    // Filtre pour ne garder que les réservations dont l'owner_id du restaurant est celui du user connecté
+    reservations.value = reservationsRaw.filter(r => r.restaurant && r.restaurant.owner_id === user.id)
   } catch (e) {
     reservations.value = []
   }
