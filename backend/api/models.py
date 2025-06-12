@@ -43,6 +43,7 @@ class Restaurant(models.Model):
     email = models.EmailField(max_length=150, blank=True, null=True)
     phone_number = models.CharField(max_length=150, blank=True, null=True)
     images = models.CharField(max_length=255, blank=True, null=True)
+    opening_days = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -56,7 +57,6 @@ class Reservation(models.Model):
     reservation_date = models.DateField(blank=True, null=True)
     status = models.CharField(max_length=100, blank=True, null=True)
     information = models.TextField(blank=True, null=True)
-    opening_days = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.name} @ {self.restaurant.name} on {self.date}"
