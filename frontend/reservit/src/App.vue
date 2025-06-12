@@ -8,7 +8,8 @@
           route.name !== 'Intro' &&
           route.name !== 'Loading' &&
           route.path !== '/' &&
-          !(user.value && user.value.is_admin === true)
+          user.value &&
+          user.value.is_admin !== true
         "
       />
       <!-- Navbar restaurant : affichée uniquement pour admin -->
