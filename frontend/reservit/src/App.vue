@@ -13,17 +13,24 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { computed, ref, watch } from 'vue'
 import Navbar from './components/NavComposant.vue'
 import RestaurantFooter from './components/RestaurantNav.vue'
 
 const route = useRoute()
-const user = computed(() => {
+const user = ref(getUser())
+
+function getUser() {
   try {
     return JSON.parse(localStorage.getItem('user') || '{}')
   } catch {
     return {}
   }
+}
+
+// Met à jour user à chaque navigation
+watch(route, () => {
+  user.value = getUser()
 })
 </script>
