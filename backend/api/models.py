@@ -15,6 +15,11 @@ class User(models.Model):
     password_hash = models.CharField(max_length=300)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    avatar_path = models.CharField(
+        max_length=255,
+        default='img/avatar/avatar1.png',  # chemin par défaut
+        blank=False
+    )
 
     def __str__(self):
         return f"{self.name} {self.family_name} ({self.email})"
