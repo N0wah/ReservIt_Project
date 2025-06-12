@@ -6,6 +6,7 @@ urlpatterns = [
     path('users/<int:id>/', views.UserRetrieveUpdateDestroy.as_view(), name='user-detail'),
     path('restaurants/', views.RestaurantListCreate.as_view(), name='restaurant-list'),
     path('restaurants/<int:id>/', views.RestaurantRetrieveUpdateDestroy.as_view(), name='restaurant-detail'),
+    path('restaurants/owner_id/<int:owner_id>/', views.RestaurantByOwnerView.as_view(), name='restaurant-by-owner'),
     path('tables/', views.TableListCreate.as_view(), name='table-list'),
     path('reservations/', views.ReservationListCreate.as_view(), name='reservation-list'),
     path('favorites/', views.FavoriteListCreate.as_view(), name='favorite-list'),

@@ -7,6 +7,12 @@ from rest_framework import status
 from .models import User, Restaurant, Table, Favorite, Reservation
 from .serializers import RestaurantSerializer, TableSerializer, ReservationSerializer, FavoriteSerializer, UserSerializer
 
+class RestaurantByOwnerView(APIView):
+    def get(self, request, owner_id):
+        restaurants = Restaurant.objects.filter(owner_id=owner_id)
+        serializer = RestaurantSerializer(restaurants, many=True)
+        return Response(serializer.data)
+
 class UsersListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
