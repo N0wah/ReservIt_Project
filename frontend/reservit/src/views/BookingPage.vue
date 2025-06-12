@@ -272,16 +272,11 @@ function handleReserve() {
     return
   }
 
-  // Ensure restaurant is a number (id) and not null/undefined
-  const restaurantId = Number(restaurantInfo.value.id || route.params.id)
-  if (!restaurantId || isNaN(restaurantId)) {
-    alert('Restaurant information is missing.')
-    return
-  }
+  
 
   axios.post(`${apiUrl}/reservations/`, {
     user_id: user.id,
-    restaurant: restaurantId, // must be a number
+    restaurant: restaurantInfo.value.id, // must be a number
     table_id: tableId, // must be a number
     guest_count: guestCount.value,
     reservation_time: selectedTime.value,
