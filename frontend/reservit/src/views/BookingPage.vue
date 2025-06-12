@@ -160,7 +160,8 @@ onMounted(async () => {
       restaurantInfo.value = {
         name: data.name || '',
         address: data.address || '',
-        cities: data.cities || data.city || ''
+        cities: data.cities || data.city || '',
+        id: data.id || data.pk || '' // Ajout de l'id si présent
       }
     } catch {
       // fallback API si parsing échoue
@@ -174,7 +175,8 @@ onMounted(async () => {
         restaurantInfo.value = {
           name: data.name || '',
           address: data.address || '',
-          cities: data.cities || data.city || ''
+          cities: data.cities || data.city || '',
+          id: data.id || data.pk || '' // Ajout de l'id si présent
         }
       }
     } catch {}
@@ -271,7 +273,7 @@ function handleReserve() {
   }
 
   // Ensure restaurant is a number (id) and not null/undefined
-  const restaurantId = Number(route.params.id)
+  const restaurantId = Number(restaurantInfo.value.id || route.params.id)
   if (!restaurantId || isNaN(restaurantId)) {
     alert('Restaurant information is missing.')
     return
