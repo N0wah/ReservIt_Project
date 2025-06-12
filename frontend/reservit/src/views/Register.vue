@@ -72,22 +72,22 @@
         </div>
 
         <div class="flex flex-col items-center">
-          <label for="avatar" class="mb-2 text-white">Profile avatar</label>
-          <input
-            id="avatar"
-            type="file"
-            accept="image/*"
-            @change="onAvatarChange"
-            class="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-orange-50 file:text-orange-700
-              hover:file:bg-orange-100
-              mb-2"
-          />
-          <div v-if="avatarPreview" class="mt-2">
-            <img :src="avatarPreview" alt="Avatar preview" class="w-20 h-20 rounded-full object-cover border-2 border-orange-400" />
+          <label class="mb-2 text-white">Choose your avatar</label>
+          <div class="flex flex-wrap gap-4 justify-center mb-2">
+            <img
+              v-for="n in 6" :key="n"
+              :src="`/img/avatar/avatar${n}.png`"
+              :alt="`Avatar ${n}`"
+              :class="[
+                'w-20 h-20 rounded-full object-cover border-2 cursor-pointer',
+                selectedAvatar === `/img/avatar/avatar${n}.png` ? 'border-orange-500 ring-2 ring-orange-400' : 'border-gray-300'
+              ]"
+              @click="selectAvatar(`/img/avatar/avatar${n}.png`)"
+            />
+          </div>
+          <div v-if="selectedAvatar" class="mt-2">
+            <span class="text-white">Selected avatar:</span>
+            <img :src="selectedAvatar" alt="Selected avatar" class="w-12 h-12 rounded-full inline-block ml-2 border-2 border-orange-400" />
           </div>
         </div>
 
@@ -127,6 +127,7 @@ const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const errorMessage = ref('')
+const selectedAvatar = ref('')
 const router = useRouter()
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -144,7 +145,8 @@ const handleRegister = async () => {
       email: email.value,
       password_hash: password.value,
       is_admin: false, 
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      avatar: selectedAvatar.value // send avatar path
     })
     localStorage.setItem('user', JSON.stringify(response.data))
     errorMessage.value = ''
@@ -156,5 +158,9 @@ const handleRegister = async () => {
       errorMessage.value = 'Registration failed'
     }
   }
+}
+
+function selectAvatar(path) {
+  selectedAvatar.value = path
 }
 </script>
