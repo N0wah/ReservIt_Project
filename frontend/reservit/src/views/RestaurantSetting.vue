@@ -16,6 +16,22 @@
         <input type="text" v-model="name" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : La Table d'Or" />
       </div>
 
+      <!-- Adresse, Ville, Pays -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm text-gray-300 mb-1">Adresse</label>
+          <input type="text" v-model="address" class="w-full bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : 123 Rue Principale" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-300 mb-1">Ville</label>
+          <input type="text" v-model="city" class="w-1/2 bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : Paris" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-300 mb-1">Pays</label>
+          <input type="text" v-model="country" class="w-1/2 bg-white text-black rounded-xl px-4 py-2" placeholder="Ex : France" />
+        </div>
+      </div>
+
       <!-- Heures d’ouverture -->
       <div>
         <label class="block text-sm text-gray-300 mb-1">Heures d’ouverture</label>
