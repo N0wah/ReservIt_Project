@@ -180,23 +180,19 @@ onMounted(async () => {
     } catch {}
   }
 
-  // Fetch available tables for the restaurant
-  if (route.params.id) {
-    loadingTables.value = true
-    try {
-      // Correct param: should be restaurant_id, not restaurants_id
-      const res = await axios.get(`${apiUrl}/tables/?restaurant_id=${route.params.id}`)
-      // Only show tables that are not reserved
-      availableTables.value = res.data.filter(table => table.is_reserved === false)
-      if (availableTables.value.length > 0) {
-        selectedTableId.value = availableTables.value[0].id
-      }
-    } catch (e) {
-      tableError.value = 'Error loading tables.'
-      availableTables.value = []
-    } finally {
-      loadingTables.value = false
+  // Fetch all tables (not filtered by restaurant)
+  loadingTables.value = true
+  try {
+    const res = await axios.get(`${apiUrl}/tables/`)
+    availableTables.value = res.data
+    if (availableTables.value.length > 0) {
+      selectedTableId.value = availableTables.value[0].id
     }
+  } catch (e) {
+    tableError.value = 'Error loading tables.'
+    availableTables.value = []
+  } finally {
+    loadingTables.value = false
   }
 })
 
