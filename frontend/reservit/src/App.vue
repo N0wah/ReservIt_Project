@@ -1,42 +1,48 @@
 <template>
   <div class="flex w-full justify-center bg-black">
-    <div class="max-w-[512px] w-full">
-      <router-view />
-      <!-- Navbar classique : affichée pour tous sauf admin et sauf sur intro -->
-      <Navbar
-        v-if="
-          route.name !== 'Intro' &&
-          route.name !== 'Loading' &&
-          route.path !== '/' &&
-          user.value &&
-          user.value.is_admin !== true
-        "
-      />
-      <!-- Navbar restaurant : affichée uniquement pour admin -->
-      <RestaurantFooter v-if="user.value && user.value.is_admin === true" />
-    </div>
+  <div class="max-w-[512px] w-full">
+    <router-view />
+  
+
+  <!-- Affiche la Navbar pour toutes les routes sauf celles exclues, si l'user n'est pas restaurant et pas admin, si on n'est pas sur BookingPage et pas sur une page de détail restaurant -->
+  <Navbar
+    v-if="
+      !excludePaths.includes(route.path) &&
+      user?.role !== 'restaurant' &&
+      user?.is_admin !== true &&
+      route.name !== 'BookingPage' &&
+      !/^\/restaurant\/[0-9]+$/.test(route.path)
+    "
+  />
+
+  <!-- Footer restaurateur : affiché si l'utilisateur est admin -->
+  <RestaurantFooter v-if="showFooter && user?.is_admin === true" />
+  </div>
   </div>
 </template>
 
 <script setup>
-import { useRoute, onBeforeRouteUpdate } from 'vue-router'
-import { computed, ref, watch, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 import Navbar from './components/NavComposant.vue'
 import RestaurantFooter from './components/RestaurantNav.vue'
 
 const route = useRoute()
-const user = ref(getUser())
+const user = JSON.parse(localStorage.getItem('user') || '{}')
 
-function getUser() {
-  try {
-    return JSON.parse(localStorage.getItem('user') || '{}')
-  } catch {
-    return {}
-  }
-}
+// Routes à exclure (connexion, intro, etc.)
+const excludePaths = [
+  '/intro', '/', '/login', '/register',
+  '/registerdetails', '/loginrestaurant',
+  '/registerrestaurant',
+  '/restaurantdetail',
+  ''
+]
 
-// Met à jour user à chaque rendu (plus fiable que watch sur route)
-watchEffect(() => {
-  user.value = getUser()
+// Masque le footer restaurateur sur les pages exclues et détail restaurant
+const showFooter = computed(() => {
+  if (excludePaths.includes(route.path)) return false
+  if (/^\/restaurant\/[0-9]+$/.test(route.path)) return false
+  return true
 })
 </script>
