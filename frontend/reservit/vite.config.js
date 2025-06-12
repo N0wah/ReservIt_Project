@@ -20,8 +20,8 @@ export default defineConfig({
         short_name: 'ReservIt',
         start_url: '/',
         display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#4DBA87',
+        background_color: '#242424',
+        theme_color: '#242424',
         icons: [
           {
             src: '/pwa-192x192.png',
