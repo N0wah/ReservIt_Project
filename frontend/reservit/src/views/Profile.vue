@@ -10,7 +10,8 @@
       </div>
 
       <div class="flex flex-col w-full items-center text-white">
-        <div class="w-32 h-32 bg-white rounded-full">
+        <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center overflow-hidden mb-2">
+          <img v-if="user && user.avatar" :src="user.avatar" alt="User avatar" class="w-full h-full object-cover" />
         </div>
         <p>{{ user?.name || 'Name' }}</p>
       </div>

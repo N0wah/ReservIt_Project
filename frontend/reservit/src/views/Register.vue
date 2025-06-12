@@ -137,7 +137,10 @@ const handleRegister = async () => {
     errorMessage.value = 'Passwords do not match'
     return
   }
-
+  if (!selectedAvatar.value) {
+    errorMessage.value = 'Please select an avatar.'
+    return
+  }
   try {
     const response = await axios.post(`${apiUrl}/users/`, {
       name: name.value,
@@ -148,7 +151,12 @@ const handleRegister = async () => {
       created_at: new Date().toISOString(),
       avatar: selectedAvatar.value // send avatar path
     })
-    localStorage.setItem('user', JSON.stringify(response.data))
+    // If backend does not return avatar, patch it
+    let userData = response.data
+    if (!userData.avatar && selectedAvatar.value) {
+      userData.avatar = selectedAvatar.value
+    }
+    localStorage.setItem('user', JSON.stringify(userData))
     errorMessage.value = ''
     router.push('/login')
   } catch (error) {
