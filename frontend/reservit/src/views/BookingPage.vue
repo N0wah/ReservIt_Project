@@ -190,7 +190,8 @@ onMounted(async () => {
   if (route.params.id) {
     loadingTables.value = true
     try {
-      const res = await axios.get(`${apiUrl}/tables/?restaurants_id=${route.params.id}`)
+      // Correct param: should be restaurant_id, not restaurants_id
+      const res = await axios.get(`${apiUrl}/tables/?restaurant_id=${route.params.id}`)
       // Only show tables that are not reserved
       availableTables.value = res.data.filter(table => table.is_reserved === false)
       if (availableTables.value.length > 0) {
