@@ -2,11 +2,11 @@
   <div class="flex w-full justify-center bg-black">
     <div class="max-w-[512px] w-full">
       <router-view />
-      <!-- Navbar pour tous sauf admin -->
+      <!-- Navbar classique : affichée pour tous sauf admin et sauf sur intro -->
       <Navbar
-        v-if="!user?.is_admin"
+        v-if="route.name !== '/intro' && !user?.is_admin"
       />
-      <!-- Footer restaurateur : affiché uniquement si l'utilisateur est admin -->
+      <!-- Navbar restaurant : affichée uniquement pour admin -->
       <RestaurantFooter v-if="user?.is_admin === true" />
     </div>
   </div>
