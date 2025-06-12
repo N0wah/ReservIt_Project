@@ -4,7 +4,7 @@
       <router-view />
       <!-- Navbar classique : affichée pour tous sauf admin et sauf sur intro -->
       <Navbar
-        v-if="route.name !== 'Intro' && !(user.value && user.value.is_admin === true)"
+        v-if="route.name !== 'Intro' && route.name !== 'LoadingScreen' && !(user.value && user.value.is_admin === true)"
       />
       <!-- Navbar restaurant : affichée uniquement pour admin -->
       <RestaurantFooter v-if="user.value && user.value.is_admin === true" />
