@@ -4,25 +4,24 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 backdrop-blur-sm"
     >
       <div class=" bg-white rounded-xl p-6 w-11/12 max-w-md text-black">
-        <h2 class="text-xl font-semibold mb-4">Modifier le profil</h2>
+        <h2 class="text-xl font-semibold mb-4">Edit Profile</h2>
   
         <form @submit.prevent="submit">
           <div class="mb-3">
-            <input placeholder="LastName" v-model="form.lastName" class="w-full p-2 rounded-md bg-gray-100 focus:ring-2 focus:ring-orange-500 focus:outline-none shadow-md" required />
+            <input placeholder="Last Name" v-model="form.lastName" class="w-full p-2 rounded-md bg-gray-100 focus:ring-2 focus:ring-orange-500 focus:outline-none shadow-md" required />
           </div>
   
           <div class="mb-3">
-            
-            <input  placeholder="FirstName" v-model="form.firstName" class="w-full p-2 rounded-md bg-gray-100 focus:ring-2 focus:ring-orange-500 focus:outline-none shadow-md" required />
+            <input  placeholder="First Name" v-model="form.firstName" class="w-full p-2 rounded-md bg-gray-100 focus:ring-2 focus:ring-orange-500 focus:outline-none shadow-md" required />
           </div>
   
           <div class="mb-4">
             <input
             placeholder="Phone"
-              v-model="form.phone"
-              class="w-full p-2 rounded-md bg-gray-100 focus:ring-2 focus:ring-orange-500 focus:outline-none shadow-md"
-              type="tel"
-              required
+            v-model="form.phone"
+            class="w-full p-2 rounded-md bg-gray-100 focus:ring-2 focus:ring-orange-500 focus:outline-none shadow-md"
+            type="tel"
+            required
             />
           </div>
   
@@ -58,16 +57,9 @@
   const form = ref({
     lastName: '',
     firstName: '',
-    phone: '',
+    phone: ''
   })
   
-  function close() {
-    emit('close')
-  }
-  
-  function submit() {
-    emit('save', form.value)
-    close()
-  }
+  const close = () => emit('close')
+  const submit = () => emit('save', form.value)
   </script>
-  

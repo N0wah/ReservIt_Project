@@ -1,5 +1,5 @@
 <template>
-    <!-- Premier bloc : au-dessus -->
+    <!-- Top block -->
     <div @click="toggleDetails" class="relative w-full bg-[#242424] rounded-2xl flex p-3 shadow-[0_3px_10.2px_rgba(0,0,0,0.25)] gap-4 items-center justify-between text-white font-Poppins z-10">
         <div class="flex gap-2">
       <div class="bg-white w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden">
@@ -19,10 +19,10 @@
       </p>
     </div>
     
-    <!---BLoc de dessous-->
+    <!-- Bottom block -->
     <div v-show="showDetails" class="relative w-full bg-[#242424] mt-[-12px] z-0 rounded-b-lg p-3 text-white shadow-[0_3px_10.2px_rgba(0,0,0,0.25)]">
       <h1 class="font-light mt-1 font-Poppins ">
-        Information :
+        Information:
       </h1>
       <p class="mt-1 text-xs font-s max-w-70">
       {{ reservation.information || 'No description.' }}

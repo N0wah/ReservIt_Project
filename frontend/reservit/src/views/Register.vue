@@ -72,7 +72,7 @@
         </div>
 
         <div class="flex flex-col items-center">
-          <label for="avatar" class="mb-2 text-white">Avatar de profil</label>
+          <label for="avatar" class="mb-2 text-white">Profile avatar</label>
           <input
             id="avatar"
             type="file"
@@ -87,16 +87,16 @@
               mb-2"
           />
           <div v-if="avatarPreview" class="mt-2">
-            <img :src="avatarPreview" alt="Aperçu de l'avatar" class="w-20 h-20 rounded-full object-cover border-2 border-orange-400" />
+            <img :src="avatarPreview" alt="Avatar preview" class="w-20 h-20 rounded-full object-cover border-2 border-orange-400" />
           </div>
         </div>
 
-        <!-- Message d'erreur -->
+        <!-- Error message -->
         <div v-if="errorMessage" class="text-red-400 text-sm text-center">
           {{ errorMessage }}
         </div>
 
-        <!-- Bouton s'enregistrer -->
+        <!-- Register button -->
         <div class="flex justify-center">
           <button
             type="submit"
@@ -109,10 +109,8 @@
 
     </div>
     <p class="fixed bottom-4 w-full text-center text-sm text-white">
-      Already have an account ?
-      <router-link to="/login" class="font-medium text-orange-500 hover:text-orange-600 underline">
-        Login
-      </router-link>
+      Already have an account?
+      <router-link to="/login" class="underline text-orange-400">Log in</router-link>
     </p>
 </template>
 

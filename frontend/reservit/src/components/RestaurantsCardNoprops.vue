@@ -7,7 +7,7 @@
       />
       <div class="p-2">
         <h4 class="font-bold text-white text-sm">Chez Mario</h4>
-        <p class="text-gray-400">12 Rue du Bon Goût, Paris</p>
+        <p class="text-gray-400">12 Good Taste Street, Paris</p>
         <div class="flex justify-between mt-2 text-white">
           <span>⭐ 4.5</span>
           <span>€€</span>
@@ -17,6 +17,5 @@
   </template>
   
   <script setup>
-  // Aucune props ici, composant autonome
+  // No props here, standalone component
   </script>
-  

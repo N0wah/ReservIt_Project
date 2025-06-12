@@ -35,13 +35,29 @@ onMounted(async () => {
   const userData = localStorage.getItem('user')
   if (!userData) return
   const user = JSON.parse(userData)
-  // Récupère les restaurants de l'admin
-  const restRes = await axios.get(`${apiUrl}/restaurants/?owner_id=${user.id}`)
+  // Récupère les restaurants de l'admin via la bonne route
+  const restRes = await axios.get(`${apiUrl}/restaurants/owner_id/${user.id}/`)
   const adminRestaurants = restRes.data
   if (!Array.isArray(adminRestaurants) || adminRestaurants.length === 0) return
   const restaurantIds = adminRestaurants.map(r => r.id)
   // Récupère toutes les réservations pour ces restaurants
   const resRes = await axios.get(`${apiUrl}/reservations/`)
-  reservations.value = resRes.data.filter(r => restaurantIds.includes(r.restaurant))
+  let reservationsRaw = resRes.data.filter(r => restaurantIds.includes(r.restaurant || r.restaurant_id))
+
+  // Pour chaque réservation, enrichit avec les infos restaurant et user
+  const restaurantMap = Object.fromEntries(adminRestaurants.map(r => [r.id, r]))
+  // Optionnel : récupérer les users en batch si besoin, ici on fait un GET par réservation
+  for (const reservation of reservationsRaw) {
+    // Ajoute l'objet restaurant
+    reservation.restaurant = restaurantMap[reservation.restaurant] || restaurantMap[reservation.restaurant_id] || null
+    // Ajoute l'objet user
+    try {
+      const userRes = await axios.get(`${apiUrl}/users/${reservation.user_id}/`)
+      reservation.user = userRes.data
+    } catch {
+      reservation.user = {}
+    }
+  }
+  reservations.value = reservationsRaw
 })
 </script>

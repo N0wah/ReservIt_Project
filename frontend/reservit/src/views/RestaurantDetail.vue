@@ -3,7 +3,7 @@
   <div v-if="restaurant" class="bg-[#242424] text-white w-screen max-w-none relative h-screen ">
     <BackButton/>
 
-    <!-- Image principale -->
+    <!-- Main image -->
     <div class="relative overflow-hidden ">
       
       <img
@@ -51,14 +51,14 @@
             v-for="(photo, index) in photos"
             :key="index"
             :src="photo"
-            :alt="`Photo ${index + 1} de ${restaurant.name}`"
+            :alt="`Photo ${index + 1} of ${restaurant.name}`"
             class="w-28 h-28 sm:w-24 sm:h-24 object-cover rounded-lg flex-shrink-0"
             loading="lazy"
           />
         </div>
       </div>
 
-      <!-- Bouton réservation -->
+      <!-- Reservation button -->
       <div>
         <button
           class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-full font-semibold text-lg"
@@ -70,8 +70,8 @@
     </div>
   </div>
 
-  <!-- Fallback loadingaa -->
-  <div v-else class="text-center text-white py-20">Chargement...</div>
+  <!-- Fallback loading -->
+  <div v-else class="text-center text-white py-20">Loading...</div>
 </template>
 
 <script setup>

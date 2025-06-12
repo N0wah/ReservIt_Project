@@ -21,7 +21,7 @@
           <input
             v-model="username"
             type="text"
-            placeholder="Nom d'utilisateur"
+            placeholder="Username"
             required
             class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-orange-500 focus:border-orange-500 bg-white"
           />
@@ -32,7 +32,7 @@
           <input
             v-model="phone"
             type="tel"
-            placeholder="Numéro de téléphone"
+            placeholder="Phone number"
             required
             class="w-full z-100 px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-orange-500 focus:border-orange-500 bg-white"
           />
@@ -40,7 +40,7 @@
         
         <!-- Ajout de l'avatar de profil -->
         <div class="flex flex-col items-center">
-          <label for="avatar" class="mb-2 text-white">Avatar de profil</label>
+          <label for="avatar" class="mb-2 text-white">Profile avatar</label>
           <input
             id="avatar"
             type="file"
@@ -55,7 +55,7 @@
               mb-2"
           />
           <div v-if="avatarPreview" class="mt-2">
-            <img :src="avatarPreview" alt="Aperçu de l'avatar" class="w-20 h-20 rounded-full object-cover border-2 border-orange-400" />
+            <img :src="avatarPreview" alt="Avatar preview" class="w-20 h-20 rounded-full object-cover border-2 border-orange-400" />
           </div>
         </div>
         <!-- Bouton terminer -->
@@ -64,16 +64,14 @@
             type="submit"
             class="w-1/3 flex justify-center items-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-light text-white bg-orange-500 hover:bg-orange-600"
           >
-            Terminer
+            Finish
           </button>
         </div>
       </form>
     </div>
     <p class="fixed bottom-4 w-full text-center text-sm text-white z-0">
-      Already have an account ?
-      <router-link to="/login" class="font-medium text-orange-500 hover:text-orange-600 underline">
-        Login
-      </router-link>
+      Already have an account?
+      <router-link to="/login" class="underline text-orange-400">Log in</router-link>
     </p>
   </template>
   
@@ -97,4 +95,3 @@
     // Ici tu peux faire un appel API ou router.push('/home') par exemple
   }
   </script>
-  

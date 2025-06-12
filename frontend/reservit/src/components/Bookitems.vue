@@ -1,42 +1,48 @@
 <template>
-<!-- Premier bloc : au-dessus -->
+<!-- Top block -->
 <div @click="toggleDetails" class="relative w-full bg-[#444444] rounded-2xl flex p-3 shadow-[0_3px_10.2px_rgba(0,0,0,0.25)] gap-4 items-center justify-between text-white font-Poppins z-1">
     <div class="flex gap-2">
-  <div class="bg-white w-12 h-12 rounded-2xl">
-    <img src="" alt="">
+  <div class="bg-white w-12 h-12 rounded-2xl overflow-hidden flex items-center justify-center">
+    <img v-if="reservation && reservation.restaurant && reservation.restaurant.images" :src="reservation.restaurant.images + '/goldenbeef1.webp'" alt="Restaurant image" class="object-cover w-12 h-12" />
   </div>
   <div class="w-[150px]">
-    <h1 class="text-sm sm:text-base md:text-lg ">Restaurant, Cities,📍</h1>
-    <p class="text-[#BCBCBC] font-light text-base">number Persons</p>
+    <h1 class="text-sm sm:text-base md:text-lg ">
+      {{ reservation && reservation.restaurant ? (reservation.restaurant.name || 'Restaurant') : 'Restaurant' }}, {{ reservation && reservation.restaurant ? (reservation.restaurant.cities || '') : '' }}
+    </h1>
+    <p class="text-[#BCBCBC] font-light text-base">{{ reservation.guest_count }} persons</p>
   </div>
     </div>
-  <p class="font-thin">02/03</p>
+  <div class="flex flex-col items-end">
+    <p class="font-thin">{{ reservation.reservation_date }}</p>
+    <p class="font-thin">{{ reservation.reservation_time }}</p>
+    <p class="font-thin">Status: {{ reservation.status }}</p>
+  </div>
 </div>
 
-<!---BLoc de dessous-->
+<!-- Bottom block -->
 <div v-show="showDetails" class="relative w-full bg-[#444444] mt-[-12px] z-0 rounded-b-lg p-3 text-white">
   <h1 class="font-light mt-1 font-Poppins">
-    information :
+    Information:
   </h1>
-  <p class="mt-1 text-xs font-s max-w-70">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget molestie ipsum. In sagit cor.</p>
-  <div class="flex justify-between">
-    <button  @click="showModal = true" class="bg-[#B40000] px-4 py-2 rounded-full text-white flex items-center justify-center mt-2">
-  Cancel
-</button>
-<Confirmation
-    :visible="showModal"
-    title="Reservation"
-    message="Are you sure to cancel your booking ?"
-    @confirm="handleConfirm"
-    @cancel="handleCancel"
-  />
-
-<button
-    @click="openMap"
-    class="flex items-center gap-2 bg=[#F6F6F6] text-white font-medium px-3 py-2 rounded-full shadow-md"
-  >
-    <MapPinIcon class="w-6 h-6" />
-  </button>
+  <p class="mt-1 text-xs font-s max-w-70">{{ reservation.information || 'No additional information.' }}</p>
+  <div class="flex justify-between mt-2">
+    <button  @click.stop="showModal = true" class="bg-[#B40000] px-4 py-2 rounded-full text-white flex items-center justify-center mt-2">
+      Cancel
+    </button>
+    <Confirmation
+      :visible="showModal"
+      title="Reservation"
+      message="Are you sure to cancel your booking?"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
+    />
+    <button
+      v-if="reservation.restaurant && reservation.restaurant.lat && reservation.restaurant.lng"
+      @click.stop="openMap"
+      class="flex items-center gap-2 bg-[#F6F6F6] text-white font-medium px-3 py-2 rounded-full shadow-md"
+    >
+      <MapPinIcon class="w-6 h-6" />
+    </button>
   </div>
 </div>
 
@@ -45,25 +51,21 @@
 import { MapPinIcon } from '@heroicons/vue/24/solid'
 import { ref } from 'vue'
 import Confirmation from '@/components/Confirmation.vue'
+import axios from 'axios'
 
-defineProps({
-  label: {
-    type: String,
-    default: 'Voir sur la carte'
-  },
-  lat: {
-    type: Number,
-    required: true
-  },
-  lng: {
-    type: Number,
+// Props update
+const props = defineProps({
+  reservation: {
+    type: Object,
     required: true
   }
 })
 
 const openMap = () => {
-  const url = `https://www.google.com/maps?q=${props.lat},${props.lng}`
-  window.open(url, '_blank')
+  if (props.reservation && props.reservation.restaurant && props.reservation.restaurant.lat && props.reservation.restaurant.lng) {
+    const url = `https://www.google.com/maps?q=${props.reservation.restaurant.lat},${props.reservation.restaurant.lng}`
+    window.open(url, '_blank')
+  }
 }
 
 const showDetails = ref(false)
@@ -74,9 +76,18 @@ const toggleDetails = () => {
 
 const showModal = ref(false)
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   showModal.value = false
-  console.log('Action confirmée !')
+  try {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/reservations/${props.reservation.id}/`)
+    // Set the table as not reserved if table_id is present
+    if (props.reservation.table_id) {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/tables/${props.reservation.table_id}/`, { is_reserved: false })
+    }
+    window.location.reload()
+  } catch (e) {
+    alert('Failed to cancel the reservation or update the table.')
+  }
 }
 
 const handleCancel = () => {

@@ -12,7 +12,7 @@
       <div class="flex flex-col w-full items-center text-white">
         <div class="w-32 h-32 bg-white rounded-full">
         </div>
-        <p>{{ user?.name || 'Nom' }}</p>
+        <p>{{ user?.name || 'Name' }}</p>
       </div>
       <h1 class="font-Poppins text-white ml-6 mt-4 font-light">Reservation</h1>
       <div class="flex flex-col w-full items-center text-white">
@@ -33,11 +33,11 @@
             </div>
             <div class="flex justify-between w-full gap- items-center border-b border-[#474747] pt-6">
                 <p class="font-Poppins text-[#B2B2B2]">phone</p>
-                <p class="text-sm text-white">{{ user?.phone || 'Non renseigné' }}</p>
+                <p class="text-sm text-white">{{ user?.phone || 'Not provided' }}</p>
             </div>
             <div class="flex justify-between w-full gap- items-center border-b border-[#474747] pt-6">
                 <p class="font-Poppins text-[#B2B2B2]">country</p>
-                <p class="text-sm text-white">{{ user?.country || 'Non renseigné' }}</p>
+                <p class="text-sm text-white">{{ user?.country || 'Not provided' }}</p>
             </div>
         </div>
       </div>
