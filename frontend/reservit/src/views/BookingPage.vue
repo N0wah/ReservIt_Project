@@ -66,18 +66,12 @@
       <div v-if="loadingTables" class="text-gray-400">Loading tables...</div>
       <div v-else-if="tableError" class="text-red-400">{{ tableError }}</div>
       <div v-else-if="availableTables.length === 0" class="text-gray-400">No table available for this slot.</div>
-      <div v-else class="flex flex-wrap gap-2">
-        <button
-          v-for="table in availableTables"
-          :key="table.id"
-          :class="[
-            'px-4 py-2 rounded-full border',
-            selectedTableId === table.id ? 'bg-orange-500 text-white border-orange-500' : 'bg-white text-black border-gray-300'
-          ]"
-          @click="selectedTableId = table.id"
-        >
-          Table {{ table.table_number }} ({{ table.capacity }} pers)
-        </button>
+      <div v-else>
+        <select v-model="selectedTableId" class="text-black px-3 py-2 rounded">
+          <option v-for="table in availableTables" :key="table.id" :value="table.id">
+            Table {{ table.table_number }} ({{ table.capacity }} pers)
+          </option>
+        </select>
       </div>
     </section>
 
