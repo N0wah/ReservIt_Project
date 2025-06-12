@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <div class="flex w-full justify-center bg-black">
+  <div class="max-w-[512px] w-full">
     <router-view />
-  </div>
+  
 
   <!-- Affiche la Navbar pour toutes les routes sauf celles exclues, si l'user n'est pas restaurant et pas admin, si on n'est pas sur BookingPage et pas sur une page de détail restaurant -->
   <Navbar
@@ -16,6 +17,8 @@
 
   <!-- Footer restaurateur : affiché si l'utilisateur est admin -->
   <RestaurantFooter v-if="showFooter && user?.is_admin === true" />
+  </div>
+  </div>
 </template>
 
 <script setup>
