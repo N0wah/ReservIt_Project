@@ -7,7 +7,12 @@
     <section class="w-full bg-[#444444] rounded-2xl p-3 shadow-[0_2px_10.2px_rgba(0,0,0,0.25)]">
       <div class="flex justify-between items-center w-full">
         <div class="flex items-center gap-2">
-          <div class="w-10 h-10 bg-white rounded-full" />
+            <img
+            v-if="userInfo.avatar_path"
+            :src="userInfo.avatar_path"
+            alt="User avatar"
+            class="w-10 h-10 bg-white rounded-full object-cover"
+            />
           <div>
             <h1 class="text-white">{{ userInfo.firstName }} {{ userInfo.lastName }}</h1>
             <div class="flex gap-2 items-center mt-1">
@@ -66,12 +71,22 @@
       <div v-if="loadingTables" class="text-gray-400">Loading tables...</div>
       <div v-else-if="tableError" class="text-red-400">{{ tableError }}</div>
       <div v-else-if="availableTables.length === 0" class="text-gray-400">No table available for this slot.</div>
-      <div v-else>
-        <select v-model="selectedTableId" class="text-black px-3 py-2 rounded">
-          <option v-for="table in availableTables" :key="table.id" :value="table.id">
-            Table {{ table.table_number }} ({{ table.capacity }} pers)
-          </option>
-        </select>
+      <div v-else class="flex flex-wrap gap-3">
+        <button
+          v-for="table in availableTables"
+          :key="table.id"
+          :class="[
+            'px-5 py-3 rounded-2xl font-semibold transition-all duration-200',
+            'shadow-[0_2px_8px_rgba(0,0,0,0.15)]',
+            selectedTableId === table.id
+              ? 'bg-orange-500 text-white scale-105 border-2 border-orange-400'
+              : 'bg-[#444444] text-white hover:bg-orange-400 hover:text-black border border-[#666]'
+          ]"
+          @click="selectedTableId = table.id"
+        >
+          Table {{ table.table_number }}<br>
+          <span class="text-xs font-normal">({{ table.capacity }} pers)</span>
+        </button>
       </div>
     </section>
 
@@ -82,12 +97,6 @@
         class="bg-orange-500 w-full hover:bg-orange-600 text-white font-light text-2xl py-3 px-10 rounded-full transition duration-200 shadow-[1px_3px_3.7px_rgba(0,0,0,0.25)]"
       >
         Reserve It now
-      </button>
-      <button
-        @click="handleLogout"
-        class="bg-red-500 hover:bg-red-600 text-white font-light text-base py-2 px-6 rounded-full transition duration-200 shadow-md mt-2"
-      >
-        Logout
       </button>
     </div>
   </div>
@@ -151,6 +160,7 @@ onMounted(async () => {
     userInfo.value.lastName = user.family_name || ''
     userInfo.value.phone = user.phone || ''
     userInfo.value.email = user.email || ''
+    userInfo.value.avatar_path = user.avatar_path || ''
   }
   // Prend les infos du restaurant depuis le localStorage si elles existent
   const storedRestaurant = localStorage.getItem('selectedRestaurant')

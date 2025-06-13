@@ -5,8 +5,8 @@
         <h4 class="font-bold text-white text-sm">{{ name }}</h4>
         <p class="text-gray-400">{{ address }}</p>
         <div class="flex justify-between mt-2">
-          <span>{{ rating }}</span>
-          <span>{{ price }}</span>
+          <span class="text-white">{{ rating }}</span>
+          <span class="text-white">{{ price }}</span>
         </div>
       </div>
     </div>

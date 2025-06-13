@@ -29,7 +29,7 @@
               :address="restaurant.address"
               :rating="restaurant.rating ? restaurant.rating : 'N/A'"
               :price="restaurant.price ? restaurant.price : '$$'"
-              :image="restaurant.images + '/goldenbeef1.webp'"
+              :image="restaurant.images"
             />
           </router-link>
           <FavoriteButton :active="true" @click="removeFavorite(restaurant)" />

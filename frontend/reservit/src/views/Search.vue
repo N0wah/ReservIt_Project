@@ -8,7 +8,7 @@
     </div>
 
     <!-- Liste des restaurants -->
-    <div class="grid grid-cols-2 gap-4 mt-6">
+    <div class="grid grid-cols-2 gap-4 mt-6 texte-white">
       <router-link
         v-for="restaurant in restaurants"
         :key="restaurant.id"
@@ -20,7 +20,7 @@
           :address="restaurant.address"
           :rating="restaurant.rating ? restaurant.rating : 'N/A'"
           :price="restaurant.price ? restaurant.price : '$$'"
-          :image="restaurant.images + '/goldenbeef1.webp'"
+          :image="restaurant.images"
         />
       </router-link>
     </div>

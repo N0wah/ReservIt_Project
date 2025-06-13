@@ -3,7 +3,7 @@
     <div @click="toggleDetails" class="relative w-full bg-[#242424] rounded-2xl flex p-3 shadow-[0_3px_10.2px_rgba(0,0,0,0.25)] gap-4 items-center justify-between text-white font-Poppins z-10">
         <div class="flex gap-2">
       <div class="bg-white w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden">
-        <img v-if="reservation.restaurant && reservation.restaurant.images" :src="reservation.restaurant.images + '/goldenbeef1.webp'" alt="" class="object-cover w-12 h-12" />
+        <img v-if="reservation.restaurant && reservation.restaurant.images" :src="reservation.restaurant.images" alt="" class="object-cover w-12 h-12" />
       </div>
       <div class="max-w-[250px]">
         <h1 class="text-sm sm:text-base md:text-lg ">

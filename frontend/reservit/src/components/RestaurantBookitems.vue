@@ -4,11 +4,11 @@
     <div class="flex gap-2">
   <div class="bg-white w-12 h-12 rounded-2xl">
     <!-- Show image if available -->
-    <img v-if="reservation && reservation.restaurant && reservation.restaurant.images" :src="reservation.restaurant.images + '/goldenbeef1.webp'" alt="" class="object-cover w-12 h-12" />
+    <img v-if="reservation && reservation.restaurant && reservation.restaurant.images" :src="reservation.restaurant.images" alt="" class="object-cover w-12 h-12" />
   </div>
   <div class="w-[150px]">
     <h1 class="text-sm sm:text-base md:text-lg ">
-      {{ reservation && reservation.restaurant ? (reservation.restaurant.name || 'Restaurant') : 'Restaurant' }}, {{ reservation && reservation.restaurant ? (reservation.restaurant.cities || '') : '' }}
+      {{ reservation && reservation.user ? (reservation.user.name || 'User') : 'User' }} {{ reservation && reservation.restaurant ? (reservation.restaurant.cities || '') : '' }}
     </h1>
     <p class="text-[#BCBCBC] font-light text-base">{{ reservation?.guest_count || '' }} persons</p>
   </div>
@@ -60,8 +60,9 @@
 <script setup>
 import { ref } from 'vue'
 import Confirmation from '@/components/Confirmation.vue'
+import axios from 'axios'
 
-defineProps({
+const props = defineProps({
   label: {
     type: String,
     default: 'Voir sur la carte'
@@ -93,9 +94,17 @@ const toggleDetails = () => {
 
 const showModal = ref(false)
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   showModal.value = false
-  console.log('Action confirmée !')
+  // Suppression de la réservation côté backend
+  if (props.reservation && props.reservation.id) {
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/reservations/${props.reservation.id}/`)
+      window.location.reload()
+    } catch (e) {
+      alert('Erreur lors de la suppression de la réservation.')
+    }
+  }
 }
 
 const handleCancel = () => {
