@@ -15,4 +15,5 @@ urlpatterns = [
     path('favorites/', views.FavoriteListCreate.as_view(), name='favorite-list'),
     path('favorites/<int:id>/', views.FavoriteRetrieveUpdateDestroy.as_view(), name='favorite-detail'),
     path('login/', views.LoginView.as_view(), name='login'),
+    path('restaurants/<int:restaurant_id>/upload_images/', views.RestaurantImageUploadView.as_view(), name='restaurant-upload-images'),
 ]

@@ -199,6 +199,51 @@ const handleSubmit = async (e) => {
     return;
   }
   const user = JSON.parse(userData);
+
+  // 1. Check if restaurant exists (edit mode)
+  let restaurantId = null;
+  try {
+    const res = await axios.get(`${apiUrl}/restaurants/owner_id/${user.id}/`);
+    if (Array.isArray(res.data) && res.data.length > 0) {
+      restaurantId = res.data[0].id;
+    }
+  } catch {}
+
+  // 2. If there are new images to upload, send them to backend
+  let uploadedImagePaths = [];
+  const filesToUpload = savedPhotos.value.filter(p => p.file).map(p => p.file);
+  if (filesToUpload.length > 0) {
+    if (!restaurantId) {
+      // Need to create restaurant first to get ID
+      const payload = {
+        name: name.value,
+        address: address.value,
+        city: city.value,
+        country: country.value,
+        description: description.value,
+        email: email.value,
+        phone_number: phoneNumber.value,
+        images: '',
+        owner_id: user.id,
+        opening_days: selectedDaysString.value
+      };
+      const createRes = await axios.post(`${apiUrl}/restaurants/`, payload);
+      restaurantId = createRes.data.id;
+    }
+    const formData = new FormData();
+    filesToUpload.forEach(f => formData.append('images', f));
+    try {
+      const uploadRes = await axios.post(`${apiUrl}/restaurants/${restaurantId}/upload_images/`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      uploadedImagePaths = uploadRes.data.images;
+    } catch (err) {
+      alert('Image upload failed.');
+      return;
+    }
+  }
+
+  // 3. Prepare payload for restaurant update
   const payload = {
     name: name.value,
     address: address.value,
@@ -207,20 +252,18 @@ const handleSubmit = async (e) => {
     description: description.value,
     email: email.value,
     phone_number: phoneNumber.value,
-    images: savedPhotos.value.length > 0 ? savedPhotos.value.map(p => p.url).join(',') : '',
+    images: uploadedImagePaths.length > 0
+      ? uploadedImagePaths.join(',')
+      : savedPhotos.value.filter(p => !p.file).map(p => p.url).join(','),
     owner_id: user.id,
     opening_days: selectedDaysString.value
   };
+
   try {
-    // Check if the user already has a restaurant
-    const res = await axios.get(`${apiUrl}/restaurants/owner_id/${user.id}/`);
-    if (Array.isArray(res.data) && res.data.length > 0) {
-      // Already has one, update the first found
-      const restaurantId = res.data[0].id;
+    if (restaurantId) {
       await axios.put(`${apiUrl}/restaurants/${restaurantId}/`, payload);
       alert('Restaurant updated successfully!');
     } else {
-      // Otherwise, create
       await axios.post(`${apiUrl}/restaurants/`, payload);
       alert('Restaurant created successfully!');
     }
