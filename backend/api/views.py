@@ -9,6 +9,10 @@ from .serializers import ReservationSerializer
 
 from .models import User, Restaurant, Table, Favorite, Reservation
 from .serializers import RestaurantSerializer, TableSerializer, ReservationSerializer, FavoriteSerializer, UserSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from django.conf import settings
+import os
+from django.utils.text import slugify
 
 class RestaurantByOwnerView(APIView):
     def get(self, request, owner_id):
@@ -83,3 +87,44 @@ class ReservationByUserView(APIView):
         reservations = Reservation.objects.filter(user_id=user_id)
         serializer = ReservationSerializer(reservations, many=True)
         return Response(serializer.data)
+
+class RestaurantImageUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, restaurant_id):
+        try:
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+        except Restaurant.DoesNotExist:
+            return Response({'error': 'Restaurant not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        files = request.FILES.getlist('images')
+        if not files:
+            return Response({'error': 'No images uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Directory: /frontend/reservit/public/img/restaurants/<restaurant_name_slug>/
+        restaurant_name_slug = slugify(restaurant.name)
+        base_dir = os.path.join(settings.BASE_DIR, 'frontend', 'reservit', 'public', 'img', 'restaurants', restaurant_name_slug)
+        os.makedirs(base_dir, exist_ok=True)
+
+        image_paths = []
+        for file in files:
+            filename = file.name
+            file_path = os.path.join(base_dir, filename)
+            # Avoid overwriting: add suffix if file exists
+            base, ext = os.path.splitext(filename)
+            counter = 1
+            while os.path.exists(file_path):
+                filename = f"{base}_{counter}{ext}"
+                file_path = os.path.join(base_dir, filename)
+                counter += 1
+            with open(file_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            # Store relative path for frontend
+            rel_path = f"/img/restaurants/{restaurant_name_slug}/{filename}"
+            image_paths.append(rel_path)
+
+        # Update images field (comma-separated)
+        restaurant.images = ','.join(image_paths)
+        restaurant.save()
+        return Response({'images': image_paths}, status=status.HTTP_200_OK)
