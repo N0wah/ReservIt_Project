@@ -57,7 +57,7 @@
     <!-- Message -->
     <section class="w-full">
       <h2 class="text-xl mb-2">Message</h2>
-      <MessageTexteArea />
+      <MessageTexteArea v-model="message" />
     </section>
 
     <!-- Table Selection -->
@@ -199,7 +199,7 @@ onMounted(async () => {
 })
 
 function handleTimeSelect(time) {
-  selectedTime.value = time
+  selectedTime.value = time + ':00'
 }
 
 function updateProfile(newData) {
@@ -265,6 +265,8 @@ function handleReserve() {
     }
   }
 
+  
+
   // Ensure table_id is a number and not null/undefined
   const tableId = Number(selectedTableId.value)
   if (!tableId || isNaN(tableId)) {
@@ -278,6 +280,20 @@ function handleReserve() {
     alert('Restaurant information is missing.')
     return
   }
+
+  // DEBUG: Log all values before sending
+  console.log('Reservation debug:', {
+    user_id: user.id,
+    restaurant: restaurantId,
+    table_id: tableId,
+    guest_count: guestCount.value,
+    reservation_time: selectedTime.value,
+    reservation_date: formattedDate,
+    status: 'Pending',
+    information: message.value
+  })
+
+
 
   axios.post(`${apiUrl}/reservations/`, {
     user_id: user.id,
@@ -296,7 +312,6 @@ function handleReserve() {
       if (reservedTable) reservedTable.is_reserved = true
     })
     .catch((error) => {
-      // Remove the alert with restrantId (typo and undefined)
       if (error.response && error.response.data) {
         alert('Error: ' + JSON.stringify(error.response.data))
       } else {
@@ -308,6 +323,6 @@ function handleReserve() {
 function handleLogout() {
   // Logique de déconnexion
   localStorage.removeItem('user')
-  // Rediriger ou mettre à jour l'état de l'application si nécessaire
+
 }
 </script>

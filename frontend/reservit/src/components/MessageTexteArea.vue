@@ -11,7 +11,17 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue'
+  import { ref, watch, defineProps } from 'vue'
   
-  const message = ref('')
+  const modelValue = defineProps({ modelValue: String })
+  const message = ref(modelValue.modelValue || '')
+  
+  watch(() => modelValue.modelValue, (val) => {
+    message.value = val
+  })
+  
+  watch(message, (val) => {
+    // Emit update to parent
+    emit('update:modelValue', val)
+  })
   </script>
