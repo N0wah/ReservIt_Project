@@ -38,7 +38,7 @@ class TableSerializer(serializers.ModelSerializer):
         fields = ['id', 'restaurant_id', 'capacity', 'table_number', 'is_reserved']
 
 class ReservationSerializer(serializers.ModelSerializer):
-    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user_id', read_only=False)
+    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), read_only=False)
 
     class Meta:
         model = Reservation
