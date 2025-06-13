@@ -265,11 +265,7 @@ function handleReserve() {
     }
   }
 
-  const timeStr = selectedTime.value;
-  const [hours, minutes, seconds] = timeStr.split(':').map(Number);
-  const reservation_time = new Date();
-  reservation_time.setHours(hours, minutes, seconds, 0);
-
+  
 
   // Ensure table_id is a number and not null/undefined
   const tableId = Number(selectedTableId.value)
@@ -291,7 +287,7 @@ function handleReserve() {
     restaurant: restaurantId,
     table_id: tableId,
     guest_count: guestCount.value,
-    reservation_time: reservation_time,
+    reservation_time: selectedTime.value,
     reservation_date: formattedDate,
     status: 'Pending',
     information: message.value
@@ -304,7 +300,7 @@ function handleReserve() {
     restaurant: restaurantId, // must be a number and not null
     table_id: tableId, // must be a number
     guest_count: guestCount.value,
-    reservation_time: reservation_time,
+    reservation_time: selectedTime.value,
     reservation_date: formattedDate,
     status: 'Pending',
     information: message.value || ''
