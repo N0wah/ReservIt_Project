@@ -199,7 +199,7 @@ onMounted(async () => {
 })
 
 function handleTimeSelect(time) {
-  selectedTime.value = time
+  selectedTime.value = time + ':00'
 }
 
 function updateProfile(newData) {
@@ -265,6 +265,12 @@ function handleReserve() {
     }
   }
 
+  const timeStr = selectedTime.value;
+  const [hours, minutes, seconds] = timeStr.split(':').map(Number);
+  const reservation_time = new Date();
+  reservation_time.setHours(hours, minutes, seconds, 0);
+
+
   // Ensure table_id is a number and not null/undefined
   const tableId = Number(selectedTableId.value)
   if (!tableId || isNaN(tableId)) {
@@ -285,20 +291,20 @@ function handleReserve() {
     restaurant: restaurantId,
     table_id: tableId,
     guest_count: guestCount.value,
-    reservation_time: selectedTime.value,
+    reservation_time: reservation_time,
     reservation_date: formattedDate,
     status: 'Pending',
     information: message.value
   })
+
+
 
   axios.post(`${apiUrl}/reservations/`, {
     user_id: user.id,
     restaurant: restaurantId, // must be a number and not null
     table_id: tableId, // must be a number
     guest_count: guestCount.value,
-    reservation_time: selectedTime.value.length === 5 
-    ? `${selectedTime.value}:00` 
-    : selectedTime.value,
+    reservation_time: reservation_time,
     reservation_date: formattedDate,
     status: 'Pending',
     information: message.value || ''
