@@ -84,7 +84,8 @@ onMounted(async () => {
         parsedUser = JSON.parse(userData)
       }
       user.value = parsedUser
-      const res = await axios.get(`${apiUrl}/reservations/?user_id=${user.value.id}`)
+      // Use the dedicated user_id route to get all reservations for this user
+      const res = await axios.get(`${apiUrl}/reservations/user_id/${user.value.id}/`)
       const reservationsWithRestaurant = await Promise.all(res.data.map(async reservation => {
         try {
           const restRes = await axios.get(`${apiUrl}/restaurants/${reservation.restaurant}/`)

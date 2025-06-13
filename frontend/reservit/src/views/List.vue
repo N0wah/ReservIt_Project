@@ -16,11 +16,16 @@
         Log in
       </router-link>
     </div>
-    <ul v-else class="list-none flex flex-col gap-2 z-0">
-      <li v-for="reservation in filteredReservations" :key="reservation.id">
-        <BookitemsBooked :reservation="reservation" />
-      </li>
-    </ul>
+    <div v-else>
+      <div v-if="filteredReservations.length === 0" class="text-white text-center my-8">
+        You have not made any reservations.
+      </div>
+      <ul v-else class="list-none flex flex-col gap-2 z-0">
+        <li v-for="reservation in filteredReservations" :key="reservation.id">
+          <BookitemsBooked :reservation="reservation" />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -41,8 +46,8 @@ onMounted(async () => {
     const user = JSON.parse(userData)
     try {
       const apiUrl = import.meta.env.VITE_API_URL
-      // Fetch all reservations, then filter by user in frontend
-      const res = await axios.get(`${apiUrl}/reservations/`)
+      // Fetch all reservations for the user using the new backend route
+      const res = await axios.get(`${apiUrl}/reservations/user_id/${user.id}/`)
       // Optionally, fetch restaurant details for each reservation
       const reservationsWithRestaurant = await Promise.all(res.data.map(async reservation => {
         try {
@@ -60,16 +65,8 @@ onMounted(async () => {
 })
 
 const filteredReservations = computed(() => {
-  const userData = localStorage.getItem('user')
-  let userId = null
-  if (userData) {
-    try {
-      userId = JSON.parse(userData).id
-    } catch {}
-  }
   return reservations.value.filter(r =>
-    (r.status === 'Pending' || r.status === 'Booked') &&
-    r.user === userId
+    r.status === 'Pending' || r.status === 'Booked'
   )
 })
 </script>
