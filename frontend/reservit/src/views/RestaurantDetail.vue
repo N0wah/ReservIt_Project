@@ -94,14 +94,12 @@ onMounted(async () => {
     const response = await axios.get(`${apiUrl}/restaurants/${route.params.id}/`)
     restaurant.value = response.data
 
+    // Use the images field directly (comma-separated paths)
     if (restaurant.value.images) {
-      const basePath = restaurant.value.images.replace(/^\/public/, '')
-      mainImage.value = basePath ? `${basePath}/goldenbeef1.webp` : '/img/GoldenBeef/goldenbeef1.webp'
-      photos.value = [
-        mainImage.value,
-        `${basePath}/goldenbeef2.webp`,
-        `${basePath}/goldenbeef3.webp`
-      ]
+      // Split images by comma, remove empty, and use the first as main
+      const imageList = restaurant.value.images.split(',').map(s => s.trim()).filter(Boolean)
+      mainImage.value = imageList.length > 0 ? imageList[0] : '/img/GoldenBeef/goldenbeef1.webp'
+      photos.value = imageList.length > 0 ? imageList : [mainImage.value]
     } else {
       mainImage.value = '/img/GoldenBeef/goldenbeef1.webp'
       photos.value = [mainImage.value]

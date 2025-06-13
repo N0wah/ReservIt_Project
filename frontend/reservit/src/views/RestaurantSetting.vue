@@ -172,13 +172,43 @@ const handlePhotoChange = (event) => {
     return
   }
   photoError.value = ''
-  // Add new photos to the list (local display, adapt for real upload)
-  files.forEach(file => {
+  // Add new photos to the list (local display and upload immediately)
+  files.forEach(async (file) => {
+    // Preview for UI
     const reader = new FileReader()
     reader.onload = (e) => {
       savedPhotos.value.push({ url: e.target.result, file })
     }
     reader.readAsDataURL(file)
+
+    // If restaurant exists, upload immediately
+    const userData = localStorage.getItem('user')
+    if (!userData) return
+    const user = JSON.parse(userData)
+    let restaurantId = null
+    try {
+      const res = await axios.get(`${apiUrl}/restaurants/owner_id/${user.id}/`)
+      if (Array.isArray(res.data) && res.data.length > 0) {
+        restaurantId = res.data[0].id
+      }
+    } catch {}
+    if (restaurantId) {
+      const formData = new FormData()
+      formData.append('images', file)
+      try {
+        const uploadRes = await axios.post(`${apiUrl}/restaurants/${restaurantId}/upload_images/`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        // Replace the preview with the real path from backend
+        if (uploadRes.data.images && uploadRes.data.images.length > 0) {
+          // Remove the preview and add the real one
+          savedPhotos.value = savedPhotos.value.filter(p => p.file !== file)
+          uploadRes.data.images.forEach(url => savedPhotos.value.push({ url }))
+        }
+      } catch (err) {
+        photoError.value = 'Image upload failed.'
+      }
+    }
   })
 }
 
