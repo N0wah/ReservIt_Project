@@ -36,7 +36,6 @@
       <!-- Top Cannes -->
       <h3 class="text-lg mt-8 mb-2">Top Cannes</h3>
       <!--<img src="@/assets/images/restaurant2.jpg" alt="Top restaurant" class="w-full h-40 object-cover rounded-xl" />-->
-      <p class="text-center mt-2">Restaurant 1</p>
     </div>
   </template>
   
