@@ -77,3 +77,9 @@ class LoginView(APIView):
                 return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         except User.DoesNotExist:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class ReservationByUserView(APIView):
+    def get(self, request, user_id):
+        reservations = Reservation.objects.filter(user_id=user_id)
+        serializer = ReservationSerializer(reservations, many=True)
+        return Response(serializer.data)

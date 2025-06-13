@@ -7,25 +7,69 @@
       </h2>
     </div>
 
-    <ul v-if="isAuthenticated" class="list-none flex flex-col gap-2 z-0">
-      <li v-for="reservation in reservations" :key="reservation.id" class="bg-white rounded-lg p-4 flex gap-4 items-center">
-        <img
-          v-if="reservation.restaurant && reservation.restaurant.images"
-          :src="reservation.restaurant.images + '/goldenbeef1.webp'"
-          alt="Image restaurant"
-          class="w-24 h-24 object-cover rounded"
-        />
-        <div>
-          <h3 class="text-xl font-bold">{{ reservation.restaurant?.name || 'Inconnu' }}</h3>
-          <p class="text-gray-600">{{ reservation.restaurant?.address || '' }}</p>
-          <p class="text-yellow-500">Note : {{ reservation.restaurant?.rating || 'N/A' }}</p>
-          <p class="text-green-600">Prix : {{ reservation.restaurant?.price || 'N/A' }}</p>
-        </div>
+    <div v-if="!isAuthenticated" class="text-white text-center w-full h-screen mt-[-15vh] flex flex-col items-center justify-center gap-4">
+      Please log in to view your reservations.
+      <router-link
+        to="/login"
+        class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-full transition duration-200"
+      >
+        Log in
+      </router-link>
+    </div>
+    <ul v-else class="list-none flex flex-col gap-2 z-0">
+      <li v-for="reservation in filteredReservations" :key="reservation.id">
+        <BookitemsBooked :reservation="reservation" />
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
-// Pas besoin de defineProps ici, car tu utilises les données de reservation
+import { computed, ref, onMounted } from 'vue'
+import axios from 'axios'
+import BookitemsBooked from '@/components/BookitemsBooked.vue'
+
+const reservations = ref([])
+const isAuthenticated = computed(() => {
+  const user = localStorage.getItem('user')
+  return !!user
+})
+
+onMounted(async () => {
+  const userData = localStorage.getItem('user')
+  if (userData) {
+    const user = JSON.parse(userData)
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL
+      // Fetch all reservations, then filter by user in frontend
+      const res = await axios.get(`${apiUrl}/reservations/`)
+      // Optionally, fetch restaurant details for each reservation
+      const reservationsWithRestaurant = await Promise.all(res.data.map(async reservation => {
+        try {
+          const restRes = await axios.get(`${apiUrl}/restaurants/${reservation.restaurant}/`)
+          return { ...reservation, restaurant: restRes.data }
+        } catch {
+          return { ...reservation, restaurant: {} }
+        }
+      }))
+      reservations.value = reservationsWithRestaurant
+    } catch (e) {
+      reservations.value = []
+    }
+  }
+})
+
+const filteredReservations = computed(() => {
+  const userData = localStorage.getItem('user')
+  let userId = null
+  if (userData) {
+    try {
+      userId = JSON.parse(userData).id
+    } catch {}
+  }
+  return reservations.value.filter(r =>
+    (r.status === 'Pending' || r.status === 'Booked') &&
+    r.user === userId
+  )
+})
 </script>

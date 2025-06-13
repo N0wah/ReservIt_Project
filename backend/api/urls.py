@@ -11,6 +11,7 @@ urlpatterns = [
     path('tables/restaurant_id/<int:restaurant_id>/', views.TableByRestaurantView.as_view(), name='tables-by-restaurant'),
     path('reservations/', views.ReservationListCreate.as_view(), name='reservation-list'),
     path('reservations/<int:id>/', views.ReservationRetrieveUpdateDestroy.as_view(), name='reservation-detail'),
+    path('reservations/user_id/<int:user_id>/', views.ReservationByUserView.as_view(), name='reservations-by-user'),
     path('favorites/', views.FavoriteListCreate.as_view(), name='favorite-list'),
     path('favorites/<int:id>/', views.FavoriteRetrieveUpdateDestroy.as_view(), name='favorite-detail'),
     path('login/', views.LoginView.as_view(), name='login'),
